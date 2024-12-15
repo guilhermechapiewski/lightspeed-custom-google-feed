@@ -6,14 +6,12 @@ This is a Python script that will fetch all of your products from your Lightspee
 
 ## Why do I need this?
 
-Lightspeed eCom has poor support for custom feeds. For example, it's not possible to create a feed that includes product variants, or custom fields and specifications. While all the mandatory fields are available in Lightspeed feeds tool itself and this is not required to make Google Merchant Center work, this makes the feed more complete and higher quality, supposedly boosting your relevance in Google therefore your online presence.
+Lightspeed eCom has poor support for custom feeds. For example, it's not possible to create a feed that includes product variants, or custom fields and specifications. While all the mandatory fields are available in Lightspeed feeds tool itself and this is not required to make Google Merchant Center work, this makes the feed more complete and higher quality, supposedly boosting your relevance in Google therefore improving your online presence.
 
 ## How to use
 
 1. Clone the repository
-2. Create a `config.py` file with the following variables:
-    - `API_KEY`
-    - `API_SECRET`
+2. Copy `config_TEMPLATE.py` to `config.py` and fill in the API key and secret
 3. Run `python fetch_products.py`
 
 ## Useful links
