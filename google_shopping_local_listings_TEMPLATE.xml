@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+    <channel>
+        <title><![CDATA[ {{ shop.title }} ]]></title>
+        <link>{{ shop.domain }}</link>
+        <description><![CDATA[ {{ shop.description }} ]]></description>
+        {% for product in products %}
+            <item>
+                <g:id>{{ product.id }}</g:id>
+                <g:store_code>{{ shop.store_code }}</g:store_code>
+              	<g:quantity>{{ product.stock_level }}</g:quantity>
+                {% if product.available %}
+                    <g:availability>in_stock</g:availability>
+  					<g:pickup_SLA>same_day</g:pickup_SLA>
+  					<g:pickup_method>buy</g:pickup_method>
+                {% else %}
+                    <g:availability>out_of_stock</g:availability>
+  					<g:pickup_SLA>3-day</g:pickup_SLA>
+  					<g:pickup_method>buy</g:pickup_method>
+                {% endif %}
+            </item>
+        {% endfor %}
+    </channel>
+</rss>
