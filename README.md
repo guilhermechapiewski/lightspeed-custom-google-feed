@@ -2,7 +2,7 @@
 
 ## What is this?
 
-This is a Python script that will fetch all of your products from your Lightspeed account using the Lightspeed eCom APIand save them to a RSS feed following the Google Merchant Center file format.
+This is a Python script that will fetch all of your products from your Lightspeed account using the Lightspeed eCom API and save them to a RSS feed following the Google Merchant Center file format.
 
 ## Why do I need this?
 
