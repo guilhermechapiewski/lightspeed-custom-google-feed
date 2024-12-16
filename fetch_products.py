@@ -1,18 +1,16 @@
 import requests
 import json
 import math
-
-# API credentials and base URL
-# Import API credentials from config file that is gitignored
-from config import API_KEY, API_SECRET
-BASE_URL = "https://api.shoplightspeed.com/us"
+from datetime import datetime
+from jinja2 import Environment, FileSystemLoader
+from config import API_KEY, API_SECRET, BASE_URL, shop
 
 # Authentication for requests
 auth = (API_KEY, API_SECRET)
 
 def get_product_count():
     """Get total number of products"""
-    url = f"{BASE_URL}/products/count.json"
+    url = f"{BASE_URL}/catalog/count.json"
     response = requests.get(url, auth=auth)
     return response.json()["count"]
 
@@ -27,7 +25,7 @@ def get_all_products():
     
     # Fetch each page of products
     for page in range(1, total_pages + 1):
-        url = f"{BASE_URL}/products.json"
+        url = f"{BASE_URL}/catalog.json"
         params = {
             "limit": per_page,
             "page": page
@@ -41,6 +39,37 @@ def get_all_products():
         
     return products
 
+def generate_feed_file(products):
+    """Generate and save the Google Shopping feed file from visible products"""
+    # Setup Jinja environment
+    env = Environment(loader=FileSystemLoader('.'))
+    template = env.get_template('google_shopping_local_listings_TEMPLATE.xml')
+    
+    # Transform products data for template
+    template_products = []
+    for product in products:
+        stock_level = next(iter(product["variants"].values()))["stockLevel"]
+        template_products.append({
+            'id': product['id'],
+            'stock_level': stock_level,
+            'available': stock_level > 0
+        })
+    
+    # Render template
+    output = template.render(
+        shop=shop,
+        products=template_products
+    )
+    
+    # Generate filename
+    filename = 'google_shopping_local_listings_feed.xml'
+    
+    # Save to file
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(output)
+
+    print(f"Successfully generated feed file: {filename}")
+
 def main():
     try:
         # Get total count
@@ -51,20 +80,13 @@ def main():
         products = get_all_products()
         print(f"Successfully retrieved {len(products)} products")
         
-        # Save to file
-        with open("products.json", "w") as f:
-            json.dump({"products": products}, f, indent=4)
-            
-        print("Products saved to products.json")
         # Filter visible products
         visible_products = [p for p in products if p["isVisible"]]
         print(f"Found {len(visible_products)} visible products")
-        
-        # Save filtered products
-        with open("visible_products.json", "w") as f:
-            json.dump({"products": visible_products}, f, indent=4)
-            
-        print("Visible products saved to visible_products.json")
+
+        #generate feed file
+        generate_feed_file(visible_products)
+        print("Feed file generated successfully")
     except Exception as e:
         print(f"Error occurred: {str(e)}")
 
