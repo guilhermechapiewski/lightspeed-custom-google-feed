@@ -20,8 +20,8 @@ This is also prepared to run as a Google App Engine application. This is useful 
 
 1. Copy `config_TEMPLATE.py` to `config.py` and fill in the API key, secret and other configuration information, including the Google Cloud Storage bucket name
 2. Run `make deploy` to push to Google Cloud
-3. Access the feed at `https://<your-project-id>.appspot.com/refresh_feed` to generate a new feed file
-4. Access the feed at `https://<your-project-id>.appspot.com/feed` to get the latest feed file
+3. Hit `https://<your-project-id>.appspot.com/refresh_feed` to generate a new feed file
+4. Access the latest feed at `https://<your-project-id>.appspot.com/feed`
 
 You will need to set up a cron job in Google Cloud to run the `refresh_feed` endpoint on a regular basis.
 
