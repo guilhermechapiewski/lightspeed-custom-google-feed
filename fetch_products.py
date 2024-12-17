@@ -1,5 +1,4 @@
 import requests
-import json
 import math
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
