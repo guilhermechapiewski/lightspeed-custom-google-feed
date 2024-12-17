@@ -9,15 +9,15 @@
             <item>
                 <g:id>{{ product.id }}</g:id>
                 <g:store_code>{{ shop.store_code }}</g:store_code>
-              	<g:quantity>{{ product.stock_level }}</g:quantity>
+                <g:quantity>{{ product.stock_level }}</g:quantity>
                 {% if product.available %}
                     <g:availability>in_stock</g:availability>
-  					<g:pickup_SLA>same_day</g:pickup_SLA>
-  					<g:pickup_method>buy</g:pickup_method>
+                    <g:pickup_SLA>same_day</g:pickup_SLA>
+                    <g:pickup_method>buy</g:pickup_method>
                 {% else %}
                     <g:availability>out_of_stock</g:availability>
-  					<g:pickup_SLA>3-day</g:pickup_SLA>
-  					<g:pickup_method>buy</g:pickup_method>
+                    <g:pickup_SLA>3-day</g:pickup_SLA>
+                    <g:pickup_method>buy</g:pickup_method>
                 {% endif %}
             </item>
         {% endfor %}
