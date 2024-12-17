@@ -105,11 +105,8 @@ def read_feed_file(cloud=False):
         with open(feed_filename, 'r', encoding='utf-8') as f:
             return f.read()
 
-def main():
+if __name__ == "__main__":
     try:
         refresh_feed_file(cloud=False)
     except Exception as e:
         print(f"Error occurred: {str(e)}")
-
-if __name__ == "__main__":
-    main()
