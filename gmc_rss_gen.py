@@ -3,7 +3,7 @@ import math
 from google.cloud import storage
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
-from config import API_KEY, API_SECRET, BASE_URL, SHOP
+from config import API_KEY, API_SECRET, BASE_URL, SHOP, CLOUD_STORAGE_BUCKET_NAME
 # Authentication for requests
 auth = (API_KEY, API_SECRET)
 feed_filename = 'google_shopping_local_listings_feed.xml'
@@ -86,7 +86,7 @@ def refresh_feed_file(cloud=False):
     if cloud:
         # Save to Google Cloud Storage bucket
         storage_client = storage.Client()
-        bucket = storage_client.bucket('peaksbikes-gmc-feeds.appspot.com')
+        bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET_NAME)
         blob = bucket.blob(feed_filename)
         blob.upload_from_string(feed_output, content_type='application/xml')
     else:
@@ -95,12 +95,15 @@ def refresh_feed_file(cloud=False):
 
     print(f"Successfully generated feed file: {feed_filename}")
 
-def read_feed_file():
-    """Read feed file from Google Cloud Storage"""
-    storage_client = storage.Client()
-    bucket = storage_client.bucket('peaksbikes-gmc-feeds.appspot.com')
-    blob = bucket.blob(feed_filename)
-    return blob.download_as_string()
+def read_feed_file(cloud=False):
+    if cloud:
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET_NAME)
+        blob = bucket.blob(feed_filename)
+        return blob.download_as_string()
+    else:
+        with open(feed_filename, 'r', encoding='utf-8') as f:
+            return f.read()
 
 def main():
     try:
