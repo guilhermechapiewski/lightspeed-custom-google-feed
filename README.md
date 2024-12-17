@@ -4,7 +4,7 @@
 
 A Python script + Google App Engine app that will fetch all of your products from your Lightspeed account/website using the [Lightspeed eCom API](https://developers.lightspeedhq.com/ecom/introduction/introduction/) and generate a RSS feed following the [Google Merchant Center](https://support.google.com/merchants/answer/14779112?hl=en) file format.
 
-_Note: As of today, the RSS feed generated is for Local Listings and Ads only. It is assumed that you already have your products set up in Google Merchant Center. In future versions (soon), both feeds will be generated/supported._
+_Note: As of today, the RSS feed generated is for Local Listings and Ads only. It is assumed that you already have your online products catalog set up in Google Merchant Center (Google Shopping Online Inventory). In future versions (soon), both feeds will be generated/supported._
 
 ## Why do I need this?
 
