@@ -27,7 +27,27 @@ This is also prepared to run as a Google App Engine application. This is useful 
 
 You will need to set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to run the `refresh_feed` endpoint on a regular basis.
 
-## Useful links
+## Lightspeed API 101
 
+Useful links:
 - [Lightspeed eCom API documentation](https://developers.lightspeedhq.com/ecom/introduction/introduction/)
 - [How to create a Lightspeed eCom API key](https://ecom-support.lightspeedhq.com/hc/en-us/articles/1260804034770-Creating-API-keys)
+
+Two easy ways to test API calls:
+1. `curl https://{cluster}/products.json -u {key}:{secret}`
+2. `curl https://{key}:{secret}@{cluster}/products.json`
+
+Example: Get the first 250 products:
+`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products.json?limit=250"`
+
+Example: Get a specific product with ID="PRODUCT_ID":
+`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products/PRODUCT_ID.json"`
+
+Example: Get all variants for a product with ID="PRODUCT_ID":
+`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/variants.json?product=PRODUCT_ID"`
+
+Example: Get all attributes for a product with ID="PRODUCT_ID":
+`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products/PRODUCT_ID/attributes.json"`
+
+Example: Get all catalog items for a product with ID="PRODUCT_ID":
+`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/catalog/PRODUCT_ID.json"`
