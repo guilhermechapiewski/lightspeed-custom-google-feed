@@ -14,7 +14,7 @@ elif os.getenv('GAE_ENV', '').startswith('flex'):
 def root():
     return '''
 Google Merchant Center Feed Generator for Lightspeed eCom<br>
-<a href="https://github.com/guilhermechapiewski/lightspeed-custom-google-feed">Documentation</a> | 
+<a href="https://github.com/guilhermechapiewski/lightspeed-custom-google-feed#lightspeed-custom-google-feed">Documentation</a> | 
 <a href="/feed">Latest feed</a> | 
 <a href="/refresh_feed">Refresh feed</a>
 '''
