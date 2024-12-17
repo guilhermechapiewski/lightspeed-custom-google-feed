@@ -2,7 +2,9 @@
 
 ## What is this?
 
-A Python script + Google App Engine app that will fetch all of your products from your Lightspeed account/website using the Lightspeed eCom API and generate a RSS feed following the Google Merchant Center file format.
+A Python script + Google App Engine app that will fetch all of your products from your Lightspeed account/website using the [Lightspeed eCom API](https://developers.lightspeedhq.com/ecom/introduction/introduction/) and generate a RSS feed following the [Google Merchant Center](https://support.google.com/merchants/answer/14779112?hl=en) file format.
+
+_Note: As of today, the RSS feed generated is for Local Listings and Ads only. It is assumed that you already have your products set up in Google Merchant Center. In future versions (soon), both feeds will be generated/supported._
 
 ## Why do I need this?
 
@@ -18,7 +20,7 @@ Lightspeed eCom has poor support for custom feeds. For example, it's not possibl
 
 ### Cloud environment (Google App Engine))
 
-This is also prepared to run as a Google App Engine application. This is useful because you will want your feed to be accessible as a data source on the web for Google Merchant Center to pick up.
+This is also prepared to run as a [Google App Engine](https://cloud.google.com/appengine) application. This is useful because you will want your feed to be accessible as a data source on the web for Google Merchant Center to pick up.
 
 1. In addition to all the steps above, fill in the additional configuration information (the Google Cloud Storage bucket name) in `config.py`
 2. Run `make deploy` to push to Google Cloud
@@ -30,7 +32,7 @@ You will need to set up a [cron job in Google Cloud](https://cloud.google.com/sc
 ## Lightspeed API 101
 
 Useful links:
-- [Lightspeed eCom API documentation](https://developers.lightspeedhq.com/ecom/introduction/introduction/)
+- [Lightspeed eCom API documentation](https://developers.lightspeedhq.com/ecom/introduction/resources/)
 - [How to create a Lightspeed eCom API key](https://ecom-support.lightspeedhq.com/hc/en-us/articles/1260804034770-Creating-API-keys)
 
 Two easy ways to test API calls:
