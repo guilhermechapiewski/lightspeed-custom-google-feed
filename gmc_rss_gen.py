@@ -3,15 +3,24 @@ import math
 from google.cloud import storage
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
+import pytz
 from config import API_KEY, API_SECRET, BASE_URL, SHOP, CLOUD_STORAGE_BUCKET_NAME
-# Authentication for requests
-auth = (API_KEY, API_SECRET)
-feed_filename = 'google_shopping_local_listings_feed.xml'
 
+# Authentication for requests
+AUTH = (API_KEY, API_SECRET)
+
+TEMPLATE_LOCAL_LISTINGS_FEED = 'TEMPLATE_gmc_local_listings.xml'
+LOCAL_LISTINGS_FEED_FILENAME = 'google_shopping_local_listings_feed.xml'
+
+def get_formatted_date():
+    now_utc = datetime.now(pytz.utc)
+    now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
+    return now_pacific.strftime('%Y-%m-%d %H:%M:%S %Z')
+    
 def get_product_count():
     """Get total number of products"""
     url = f"{BASE_URL}/catalog/count.json"
-    response = requests.get(url, auth=auth)
+    response = requests.get(url, auth=AUTH)
     return response.json()["count"]
 
 def get_all_products():
@@ -31,7 +40,7 @@ def get_all_products():
             "page": page
         }
         
-        response = requests.get(url, auth=auth, params=params)
+        response = requests.get(url, auth=AUTH, params=params)
         page_products = response.json()["products"]
         products.extend(page_products)
         
@@ -40,11 +49,6 @@ def get_all_products():
     return products
 
 def create_feed_from_template(products):
-    """Generate and save the Google Shopping feed file from visible products"""
-    # Setup Jinja environment
-    env = Environment(loader=FileSystemLoader('.'))
-    template = env.get_template('google_shopping_local_listings_TEMPLATE.xml')
-    
     # Transform products data for template
     template_products = []
     for product in products:
@@ -55,11 +59,15 @@ def create_feed_from_template(products):
             'available': stock_level > 0
         })
     
+    # Setup Jinja environment
+    env = Environment(loader=FileSystemLoader('.'))
+    template = env.get_template(TEMPLATE_LOCAL_LISTINGS_FEED)
+
     # Render template
     output = template.render(
         shop=SHOP,
         products=template_products,
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        date=get_formatted_date()
     )
     
     return output
@@ -82,28 +90,30 @@ def refresh_feed_file(cloud=False):
     print("Feed file generated successfully")
 
     # Save to file
-    
     if cloud:
         # Save to Google Cloud Storage bucket
         storage_client = storage.Client()
         bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET_NAME)
-        blob = bucket.blob(feed_filename)
+        blob = bucket.blob(LOCAL_LISTINGS_FEED_FILENAME)
         blob.upload_from_string(feed_output, content_type='application/xml')
     else:
-        with open(feed_filename, 'w', encoding='utf-8') as f:
+        with open(LOCAL_LISTINGS_FEED_FILENAME, 'w', encoding='utf-8') as f:
             f.write(feed_output)
 
-    print(f"Successfully generated feed file: {feed_filename}")
+    print(f"Successfully generated feed file: {LOCAL_LISTINGS_FEED_FILENAME}")
 
 def read_feed_file(cloud=False):
     if cloud:
         storage_client = storage.Client()
         bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET_NAME)
-        blob = bucket.blob(feed_filename)
+        blob = bucket.blob(LOCAL_LISTINGS_FEED_FILENAME)
         return blob.download_as_string()
     else:
-        with open(feed_filename, 'r', encoding='utf-8') as f:
-            return f.read()
+        try:
+            with open(LOCAL_LISTINGS_FEED_FILENAME, 'r', encoding='utf-8') as f:
+                return f.read()
+        except FileNotFoundError:
+            return "<error>Feed file not found. Please generate a feed first.</error>"
 
 if __name__ == "__main__":
     try:

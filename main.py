@@ -22,7 +22,7 @@ Google Merchant Center Feed Generator for Lightspeed eCom<br>
 @app.route("/refresh_feed")
 def refresh_feed():
     gmc_rss_gen.refresh_feed_file(cloud=RUNNING_ON_CLOUD)
-    return "RSS feed generated."
+    return "New RSS feed file is ready."
 
 @app.route("/feed")
 def feed():
