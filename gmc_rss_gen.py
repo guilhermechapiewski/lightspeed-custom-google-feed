@@ -1,7 +1,7 @@
 import requests
 import math
-from google.cloud import storage
 from datetime import datetime
+from google.cloud import storage
 from jinja2 import Environment, FileSystemLoader
 import pytz
 from config import API_KEY, API_SECRET, BASE_URL, SHOP, CLOUD_STORAGE_BUCKET_NAME
@@ -10,7 +10,7 @@ from config import API_KEY, API_SECRET, BASE_URL, SHOP, CLOUD_STORAGE_BUCKET_NAM
 AUTH = (API_KEY, API_SECRET)
 
 TEMPLATE_LOCAL_LISTINGS_FEED = 'TEMPLATE_gmc_local_listings.xml'
-LOCAL_LISTINGS_FEED_FILENAME = 'google_shopping_local_listings_feed.xml'
+LOCAL_LISTINGS_FEED_FILENAME = 'gmc_local_listings_feed.xml'
 
 def get_formatted_date():
     now_utc = datetime.now(pytz.utc)
