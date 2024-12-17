@@ -1,9 +1,12 @@
 # Deploy to Google App Engine
-deploy:
+deploy: clean
 	gcloud app deploy
 
-run:
+feed: clean
 	python3 gmc_rss_gen.py
 
+run: clean
+	python3 main.py
+
 clean:
-	rm google_shopping_local_listings_feed.xml
+	rm -f google_shopping_local_listings_feed.xml

@@ -1,11 +1,12 @@
 import requests
 import math
+from google.cloud import storage
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
-from config import API_KEY, API_SECRET, BASE_URL, shop
-
+from config import API_KEY, API_SECRET, BASE_URL, SHOP
 # Authentication for requests
 auth = (API_KEY, API_SECRET)
+feed_filename = 'google_shopping_local_listings_feed.xml'
 
 def get_product_count():
     """Get total number of products"""
@@ -38,7 +39,7 @@ def get_all_products():
         
     return products
 
-def generate_feed_file(products):
+def create_feed_from_template(products):
     """Generate and save the Google Shopping feed file from visible products"""
     # Setup Jinja environment
     env = Environment(loader=FileSystemLoader('.'))
@@ -56,37 +57,54 @@ def generate_feed_file(products):
     
     # Render template
     output = template.render(
-        shop=shop,
+        shop=SHOP,
         products=template_products,
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     )
     
-    # Generate filename
-    filename = 'google_shopping_local_listings_feed.xml'
-    
-    # Save to file
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(output)
+    return output
 
-    print(f"Successfully generated feed file: {filename}")
+def refresh_feed_file(cloud=False):
+    # Get total count
+    total_count = get_product_count()
+    print(f"Total products: {total_count}")
+    
+    # Get all products
+    products = get_all_products()
+    print(f"Successfully retrieved {len(products)} products")
+    
+    # Filter visible products
+    visible_products = [p for p in products if p["isVisible"]]
+    print(f"Found {len(visible_products)} visible products")
+
+    # Generate feed
+    feed_output = create_feed_from_template(visible_products)
+    print("Feed file generated successfully")
+
+    # Save to file
+    
+    if cloud:
+        # Save to Google Cloud Storage bucket
+        storage_client = storage.Client()
+        bucket = storage_client.bucket('peaksbikes-gmc-feeds.appspot.com')
+        blob = bucket.blob(feed_filename)
+        blob.upload_from_string(feed_output, content_type='application/xml')
+    else:
+        with open(feed_filename, 'w', encoding='utf-8') as f:
+            f.write(feed_output)
+
+    print(f"Successfully generated feed file: {feed_filename}")
+
+def read_feed_file():
+    """Read feed file from Google Cloud Storage"""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket('peaksbikes-gmc-feeds.appspot.com')
+    blob = bucket.blob(feed_filename)
+    return blob.download_as_string()
 
 def main():
     try:
-        # Get total count
-        total_count = get_product_count()
-        print(f"Total products: {total_count}")
-        
-        # Get all products
-        products = get_all_products()
-        print(f"Successfully retrieved {len(products)} products")
-        
-        # Filter visible products
-        visible_products = [p for p in products if p["isVisible"]]
-        print(f"Found {len(visible_products)} visible products")
-
-        #generate feed file
-        generate_feed_file(visible_products)
-        print("Feed file generated successfully")
+        refresh_feed_file(cloud=False)
     except Exception as e:
         print(f"Error occurred: {str(e)}")
 
