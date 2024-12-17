@@ -17,3 +17,6 @@
 __pycache__/
 # Ignored by the build system
 /setup.cfg
+
+lightspeed_api_playground/
+config_TEMPLATE.py
