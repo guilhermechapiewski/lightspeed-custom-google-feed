@@ -57,7 +57,8 @@ def generate_feed_file(products):
     # Render template
     output = template.render(
         shop=shop,
-        products=template_products
+        products=template_products,
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     )
     
     # Generate filename

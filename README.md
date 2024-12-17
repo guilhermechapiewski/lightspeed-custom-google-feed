@@ -12,7 +12,7 @@ Lightspeed eCom has poor support for custom feeds. For example, it's not possibl
 
 1. Clone the repository
 2. Copy `config_TEMPLATE.py` to `config.py` and fill in the API key and secret
-3. Run `python fetch_products.py`
+3. Run `python gmc_rss_gen.py`
 
 ## Useful links
 
