@@ -38,16 +38,16 @@ Two easy ways to test API calls:
 2. `curl https://{key}:{secret}@{cluster}/products.json`
 
 Example: Get the first 250 products:
-`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products.json?limit=250"`
+* `curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products.json?limit=250"`
 
-Example: Get a specific product with ID="PRODUCT_ID":
-`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products/PRODUCT_ID.json"`
+Example: Get a specific product with ID=`PRODUCT_ID`:
+* `curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products/PRODUCT_ID.json"`
 
-Example: Get all variants for a product with ID="PRODUCT_ID":
-`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/variants.json?product=PRODUCT_ID"`
+Example: Get all variants for a product with ID=`PRODUCT_ID`:
+* `curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/variants.json?product=PRODUCT_ID"`
 
-Example: Get all attributes for a product with ID="PRODUCT_ID":
-`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products/PRODUCT_ID/attributes.json"`
+Example: Get all attributes for a product with ID=`PRODUCT_ID`:
+* `curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/products/PRODUCT_ID/attributes.json"`
 
-Example: Get all catalog items for a product with ID="PRODUCT_ID":
-`curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/catalog/PRODUCT_ID.json"`
+Example: Get all catalog items for a product with ID=`PRODUCT_ID`:
+* `curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/catalog/PRODUCT_ID.json"`
