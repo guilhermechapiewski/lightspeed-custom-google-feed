@@ -2,9 +2,13 @@
 
 ## What is this?
 
-A Python script + Google App Engine app that will fetch all of your products from your Lightspeed account/website using the [Lightspeed eCom API](https://developers.lightspeedhq.com/ecom/introduction/introduction/) and generate a RSS feed following the [Google Merchant Center Local Listings](https://support.google.com/merchants/answer/14779112?hl=en) and [Google Merchant Center Online Inventory](https://support.google.com/merchants/answer/14779112?hl=en) file format.
+A Python script + Google App Engine app that will fetch all of your products from your Lightspeed account/website using the [Lightspeed eCom API](https://developers.lightspeedhq.com/ecom/introduction/introduction/) and generate RSS feeds following the [Google Merchant Center Local Listings](https://support.google.com/merchants/answer/14779112?hl=en) and [Google Merchant Center Online Inventory](https://support.google.com/merchants/answer/14779112?hl=en) file format.
 
-_* Note: As of today, the RSS feed generated is for Local Listings and Ads only. It is assumed that you already have your online products catalog set up in Google Merchant Center ([Google Shopping Online Inventory](https://support.google.com/merchants/answer/15182106?hl=en)). In future versions (soon), both feeds will be generated/supported._
+Two feeds are generated:
+1. One for *Google Shopping online inventory*: all products available for sale in your ecommerce website/catalog.
+2. Another one for *Google Local Listings and Ads*: all products available in the physical "store shelf".
+
+_* These two separate feeds are required to make Google Merchant Center work properly for both your online store and your physical store/local listings in Google Shopping._
 
 ## Why do I need this?
 
