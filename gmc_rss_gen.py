@@ -114,26 +114,28 @@ def prepare_template_data(products):
                     'available': product_stock_level > 0
                 }
 
-                if product_images:
+                if product_images and len(product_images) > 0:
                     template_data['images'] = product_images
                 
-                if product_categories:
+                if product_categories and len(product_categories) > 0:
                     template_data['categories'] = product_categories
                 
                 if product_price:
                     template_data['price'] = product_price
                 
-                if product_brand and product_brand.get('title'):
+                if product_brand and product_brand.get('title') and len(product_brand.get('title')) > 0:
                     template_data['brand'] = product_brand
                 
-                if product_variant.get('ean'):
+                if product_variant.get('ean') and len(product_variant.get('ean')) > 0:
                     template_data['ean'] = product_variant['ean']
                 
-                if product_variant.get('articleCode'):
+                if product_variant.get('articleCode') and len(product_variant.get('articleCode')) > 0:
                     template_data['code'] = product_variant['articleCode']
                 
                 if product_variant.get('weight'):
                     template_data['weight'] = product_variant['weight']
+                else:
+                    template_data['weight'] = 0
 
                 _TEMPLATE_DATA.append(template_data)
             except Exception as e:
