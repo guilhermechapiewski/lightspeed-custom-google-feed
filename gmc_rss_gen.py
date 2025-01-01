@@ -13,10 +13,6 @@ _TEMPLATE_DATA = []
 
 logger = logging.getLogger(__name__)
 
-def create_feed_from_template(template_filename, products):
-    template_products = prepare_template_data(products)
-    return render_template(template_filename, template_products)
-
 def prepare_template_data(products):
     # Transform products data for template
     if len(_TEMPLATE_DATA) == 0:
@@ -135,27 +131,23 @@ def prepare_template_data(products):
 def refresh_feed_files(cloud=False):
     # Get products from Lightspeed API
     products = lightspeed_client.get_all_visible_products()
-    
-    # Generate shopping online inventory feed file
-    shopping_online_inventory_feed_output = create_feed_from_template(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products)
-    logger.info("Shopping Online Inventory feed file generated successfully")
-    
-    # Generate local listings feed file
-    local_listings_feed_output = create_feed_from_template(TEMPLATE_LOCAL_LISTINGS_FEED, products)
-    logger.info("Local Listings feed file generated successfully")
 
-    # Save to files or Google Cloud Storage
+    # Prepare template data/context for feed generation
+    products_for_template = prepare_template_data(products)
+    
+    # Generate (render) feeds from templates
+    shopping_online_inventory_feed_output = render_template(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products_for_template)
+    local_listings_feed_output = render_template(TEMPLATE_LOCAL_LISTINGS_FEED, products_for_template)
+
+    # Save feeds to files or Google Cloud Storage depending on running environment
     storage.save_file(SHOPPING_ONLINE_INVENTORY_FEED_FILENAME, shopping_online_inventory_feed_output, cloud)
-    logger.info(f"Successfully generated feed file: {SHOPPING_ONLINE_INVENTORY_FEED_FILENAME}")
-
     storage.save_file(LOCAL_LISTINGS_FEED_FILENAME, local_listings_feed_output, cloud)
-    logger.info(f"Successfully generated feed file: {LOCAL_LISTINGS_FEED_FILENAME}")
 
 def read_feed_file(filename, cloud=False):
     return storage.read_file(filename, cloud)
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s][%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     try:
         logger.info("Executing from command line; refreshing feed files")
         refresh_feed_files(cloud=False)
