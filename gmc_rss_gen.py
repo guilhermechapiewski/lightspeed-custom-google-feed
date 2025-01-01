@@ -11,6 +11,24 @@ _TEMPLATE_DATA = []
 
 logger = logging.getLogger(__name__)
 
+def refresh_feed_files(cloud=False):
+    # Get products from Lightspeed API
+    products = lightspeed.get_all_visible_products()
+
+    # Prepare template data/context for feed generation
+    products_for_template = prepare_template_data(products)
+    
+    # Generate (render) feeds from templates
+    shopping_online_inventory_feed_output = template_engine.render(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products_for_template)
+    local_listings_feed_output = template_engine.render(TEMPLATE_LOCAL_LISTINGS_FEED, products_for_template)
+
+    # Save feeds to files or Google Cloud Storage depending on running environment
+    storage.save_file(SHOPPING_ONLINE_INVENTORY_FEED_FILENAME, shopping_online_inventory_feed_output, cloud)
+    storage.save_file(LOCAL_LISTINGS_FEED_FILENAME, local_listings_feed_output, cloud)
+
+def read_feed_file(filename, cloud=False):
+    return storage.read_file(filename, cloud)
+
 def prepare_template_data(products):
     # Transform products data for template
     if len(_TEMPLATE_DATA) == 0:
@@ -125,24 +143,6 @@ def prepare_template_data(products):
                 raise e  # Re-raise the exception to see the full stack trace
         
     return _TEMPLATE_DATA
-
-def refresh_feed_files(cloud=False):
-    # Get products from Lightspeed API
-    products = lightspeed.get_all_visible_products()
-
-    # Prepare template data/context for feed generation
-    products_for_template = prepare_template_data(products)
-    
-    # Generate (render) feeds from templates
-    shopping_online_inventory_feed_output = template_engine.render(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products_for_template)
-    local_listings_feed_output = template_engine.render(TEMPLATE_LOCAL_LISTINGS_FEED, products_for_template)
-
-    # Save feeds to files or Google Cloud Storage depending on running environment
-    storage.save_file(SHOPPING_ONLINE_INVENTORY_FEED_FILENAME, shopping_online_inventory_feed_output, cloud)
-    storage.save_file(LOCAL_LISTINGS_FEED_FILENAME, local_listings_feed_output, cloud)
-
-def read_feed_file(filename, cloud=False):
-    return storage.read_file(filename, cloud)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
