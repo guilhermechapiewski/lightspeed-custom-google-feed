@@ -9,4 +9,4 @@ run: clean
 	python3 main.py
 
 clean:
-	rm -f google_shopping_local_listings_feed.xml
+	rm -f gmc_*_feed.xml

@@ -2,9 +2,9 @@
 <!-- generated on {{ date }} -->
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
     <channel>
-        <title>{{ shop.title | cdata }}</title>
+        <title><![CDATA[ {{ shop.title }} ]]></title>
         <link>{{ shop.domain }}</link>
-        <description>{{ shop.description | cdata }}</description>
+        <description><![CDATA[ {{ shop.description }} ]]></description>
         {% for product in products %}
             <item>
                 <g:id>{{ product.id }}</g:id>
