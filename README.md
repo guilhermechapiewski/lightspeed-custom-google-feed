@@ -8,7 +8,7 @@ Two feeds are generated:
 1. One for *Google Shopping online inventory*: all products available for sale in your ecommerce website/catalog.
 2. Another one for *Google Local Listings and Ads*: all products available in the physical "store shelf".
 
-_* These two separate feeds are required to make Google Merchant Center work properly for both your online store and your physical store/local listings in Google Shopping._
+_These two separate feeds are required to make Google Merchant Center work properly for both your online store and your physical store/local listings in Google Shopping._
 
 ## Why do I need this?
 
