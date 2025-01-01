@@ -8,7 +8,6 @@ AUTH = (API_KEY, API_SECRET)
 logger = logging.getLogger(__name__)
 
 def get_product_count():
-    """Get total number of products"""
     url = f"{BASE_URL}/catalog/count.json"
     response = requests.get(url, auth=AUTH)
     total_count = response.json()["count"]
@@ -16,7 +15,6 @@ def get_product_count():
     return total_count
 
 def get_all_products():
-    """Get all products across all pages"""
     products = []
     
     # Get total count and calculate number of pages needed
