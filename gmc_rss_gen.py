@@ -1,9 +1,7 @@
 import logging
 import json
-import lightspeed_client
-import storage
+from lightspeed_google_feed import lightspeed, storage, template_engine
 from config import SHOP
-from template_utils import render_template
 
 TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED = 'TEMPLATE_gmc_shopping_online_inventory.xml'
 SHOPPING_ONLINE_INVENTORY_FEED_FILENAME = 'gmc_shopping_online_inventory_feed.xml'
@@ -130,14 +128,14 @@ def prepare_template_data(products):
 
 def refresh_feed_files(cloud=False):
     # Get products from Lightspeed API
-    products = lightspeed_client.get_all_visible_products()
+    products = lightspeed.get_all_visible_products()
 
     # Prepare template data/context for feed generation
     products_for_template = prepare_template_data(products)
     
     # Generate (render) feeds from templates
-    shopping_online_inventory_feed_output = render_template(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products_for_template)
-    local_listings_feed_output = render_template(TEMPLATE_LOCAL_LISTINGS_FEED, products_for_template)
+    shopping_online_inventory_feed_output = template_engine.render(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products_for_template)
+    local_listings_feed_output = template_engine.render(TEMPLATE_LOCAL_LISTINGS_FEED, products_for_template)
 
     # Save feeds to files or Google Cloud Storage depending on running environment
     storage.save_file(SHOPPING_ONLINE_INVENTORY_FEED_FILENAME, shopping_online_inventory_feed_output, cloud)

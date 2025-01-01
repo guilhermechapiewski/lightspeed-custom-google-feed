@@ -4,9 +4,11 @@ import pytz
 from jinja2 import Environment, FileSystemLoader
 from config import SHOP
 
+TEMPLATES_DIR = 'templates'
+
 logger = logging.getLogger(__name__)
 
-def render_template(template_filename, template_products):
+def render(template_filename, template_products):
     # Setup Jinja environment
     env = Environment(loader=FileSystemLoader('.'))
     env.filters['cdata'] = _jinja_cdata
@@ -14,7 +16,7 @@ def render_template(template_filename, template_products):
     env.filters['url_image'] = _jinja_url_image
     env.filters['limit'] = _jinja_limit
     env.filters['money_float'] = _jinja_money_float
-    template = env.get_template(template_filename)
+    template = env.get_template(f"./{TEMPLATES_DIR}/{template_filename}")
 
     # Render template
     output = template.render(
