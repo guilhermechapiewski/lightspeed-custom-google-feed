@@ -1,8 +1,8 @@
-from google.cloud import storage
 import logging
 import json
 import lightspeed_client
-from config import SHOP, CLOUD_STORAGE_BUCKET_NAME
+import storage
+from config import SHOP
 from template_utils import render_template
 
 TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED = 'TEMPLATE_gmc_shopping_online_inventory.xml'
@@ -144,38 +144,15 @@ def refresh_feed_files(cloud=False):
     local_listings_feed_output = create_feed_from_template(TEMPLATE_LOCAL_LISTINGS_FEED, products)
     logger.info("Local Listings feed file generated successfully")
 
-    if cloud:
-        # Save to Google Cloud Storage bucket
-        storage_client = storage.Client()
-        bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET_NAME)
-        
-        blob = bucket.blob(SHOPPING_ONLINE_INVENTORY_FEED_FILENAME)
-        blob.upload_from_string(shopping_online_inventory_feed_output, content_type='application/xml')
-        
-        blob = bucket.blob(LOCAL_LISTINGS_FEED_FILENAME)
-        blob.upload_from_string(local_listings_feed_output, content_type='application/xml')
-    else:
-        # Save to file
-        with open(SHOPPING_ONLINE_INVENTORY_FEED_FILENAME, 'w', encoding='utf-8') as f:
-            f.write(shopping_online_inventory_feed_output)
-        with open(LOCAL_LISTINGS_FEED_FILENAME, 'w', encoding='utf-8') as f:
-            f.write(local_listings_feed_output)
-
+    # Save to files or Google Cloud Storage
+    storage.save_file(SHOPPING_ONLINE_INVENTORY_FEED_FILENAME, shopping_online_inventory_feed_output, cloud)
     logger.info(f"Successfully generated feed file: {SHOPPING_ONLINE_INVENTORY_FEED_FILENAME}")
+
+    storage.save_file(LOCAL_LISTINGS_FEED_FILENAME, local_listings_feed_output, cloud)
     logger.info(f"Successfully generated feed file: {LOCAL_LISTINGS_FEED_FILENAME}")
 
 def read_feed_file(filename, cloud=False):
-    if cloud:
-        storage_client = storage.Client()
-        bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET_NAME)
-        blob = bucket.blob(filename)
-        return blob.download_as_string()
-    else:
-        try:
-            with open(filename, 'r', encoding='utf-8') as f:
-                return f.read()
-        except FileNotFoundError:
-            return "<error>Feed file not found. Please generate a feed first.</error>"
+    return storage.read_file(filename, cloud)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s][%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
