@@ -1,12 +1,10 @@
-import requests
-import math
 from google.cloud import storage
 import logging
 import json
-from config import API_KEY, API_SECRET, BASE_URL, SHOP, CLOUD_STORAGE_BUCKET_NAME
+import lightspeed_client
+from config import SHOP, CLOUD_STORAGE_BUCKET_NAME
 from template_utils import render_template
 
-AUTH = (API_KEY, API_SECRET)
 TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED = 'TEMPLATE_gmc_shopping_online_inventory.xml'
 SHOPPING_ONLINE_INVENTORY_FEED_FILENAME = 'gmc_shopping_online_inventory_feed.xml'
 TEMPLATE_LOCAL_LISTINGS_FEED = 'TEMPLATE_gmc_local_listings.xml'
@@ -14,43 +12,12 @@ LOCAL_LISTINGS_FEED_FILENAME = 'gmc_local_listings_feed.xml'
 _TEMPLATE_DATA = []
 
 logger = logging.getLogger(__name__)
-    
-def get_product_count():
-    """Get total number of products"""
-    url = f"{BASE_URL}/catalog/count.json"
-    response = requests.get(url, auth=AUTH)
-    return response.json()["count"]
-
-def get_all_products():
-    """Get all products across all pages"""
-    products = []
-    
-    # Get total count and calculate number of pages needed
-    total_count = get_product_count()
-    per_page = 250
-    total_pages = math.ceil(total_count / per_page)
-    
-    # Fetch each page of products
-    for page in range(1, total_pages + 1):
-        url = f"{BASE_URL}/catalog.json"
-        params = {
-            "limit": per_page,
-            "page": page
-        }
-        
-        response = requests.get(url, auth=AUTH, params=params)
-        page_products = response.json()["products"]
-        products.extend(page_products)
-        
-        logger.info(f"Fetched page {page}/{total_pages}")
-        
-    return products
 
 def create_feed_from_template(template_filename, products):
-    template_products = _prepare_template_data(products)
+    template_products = prepare_template_data(products)
     return render_template(template_filename, template_products)
 
-def _prepare_template_data(products):
+def prepare_template_data(products):
     # Transform products data for template
     if len(_TEMPLATE_DATA) == 0:
         for product in products:
@@ -166,24 +133,15 @@ def _prepare_template_data(products):
     return _TEMPLATE_DATA
 
 def refresh_feed_files(cloud=False):
-    # Get total products count
-    total_count = get_product_count()
-    logger.info(f"Total products: {total_count}")
+    # Get products from Lightspeed API
+    products = lightspeed_client.get_all_visible_products()
     
-    # Get all products page by page
-    products = get_all_products()
-    logger.info(f"Successfully retrieved {len(products)} products")
-    
-    # Filter visible products only
-    visible_products = [p for p in products if p["isVisible"]]
-    logger.info(f"Found {len(visible_products)} visible products")
-
     # Generate shopping online inventory feed file
-    shopping_online_inventory_feed_output = create_feed_from_template(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, visible_products)
+    shopping_online_inventory_feed_output = create_feed_from_template(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products)
     logger.info("Shopping Online Inventory feed file generated successfully")
     
     # Generate local listings feed file
-    local_listings_feed_output = create_feed_from_template(TEMPLATE_LOCAL_LISTINGS_FEED, visible_products)
+    local_listings_feed_output = create_feed_from_template(TEMPLATE_LOCAL_LISTINGS_FEED, products)
     logger.info("Local Listings feed file generated successfully")
 
     if cloud:
