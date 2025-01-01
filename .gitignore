@@ -1,4 +1,4 @@
 .vscode/
 config.py
 lightspeed_api_playground/
-google_shopping_local_listings_feed.xml
+gmc_*_feed.xml

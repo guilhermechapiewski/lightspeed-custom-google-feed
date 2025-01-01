@@ -11,9 +11,6 @@
                 <g:quantity>{{ product.stock_level }}</g:quantity>
                 <title>{{ product.fulltitle | cdata }}</title>
                 <description>{{ product.description | cdata }}</description>
-                {% if product.google_category %}
-                    <g:google_product_category>{{ product.google_category | cdata }}</g:google_product_category>
-                {% endif %}
                 <link>{{ (product.url ~ '?source=googlebase') | url }}</link>
                 {% for image in product.images | limit(1) %}
                     {% if loop.first %}
@@ -66,12 +63,6 @@
                 <g:gtin>{{ product.ean | cdata }}</g:gtin>
                 <g:mpn>{{ product.code | cdata }}</g:mpn>
                 <g:shipping_weight>{{ product.weight }} g</g:shipping_weight>
-                {% if product.shipping %}
-                    <g:shipping>
-                        <g:country>{{ shop.country | cdata }}</g:country>
-                        <g:price>{{ product.shipping.price | money_float }} {{ shop.currency | upper }}</g:price>
-                    </g:shipping>
-                {% endif %}
             </item>
         {% endfor %}
     </channel>

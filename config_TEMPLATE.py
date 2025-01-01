@@ -11,5 +11,7 @@ SHOP = {
     'title': 'Your Store Name',
     'domain': 'https://yourstore.com',
     'description': 'Your Store Description',
-    'store_code': 'your_store_code_here'
+    'store_code': 'your_store_code_here',
+    'country': 'US',
+    'currency': 'USD'
 }
