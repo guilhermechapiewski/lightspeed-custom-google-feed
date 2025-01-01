@@ -1,11 +1,9 @@
 import requests
 import math
-from datetime import datetime
 from google.cloud import storage
-from jinja2 import Environment, FileSystemLoader
-import pytz
 import json
 from config import API_KEY, API_SECRET, BASE_URL, SHOP, CLOUD_STORAGE_BUCKET_NAME
+from template_utils import render_template
 
 # Authentication for requests
 AUTH = (API_KEY, API_SECRET)
@@ -17,11 +15,6 @@ TEMPLATE_LOCAL_LISTINGS_FEED = 'TEMPLATE_gmc_local_listings.xml'
 LOCAL_LISTINGS_FEED_FILENAME = 'gmc_local_listings_feed.xml'
 
 _TEMPLATE_DATA = []
-
-def get_formatted_date():
-    now_utc = datetime.now(pytz.utc)
-    now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
-    return now_pacific.strftime('%Y-%m-%d %H:%M:%S %Z')
     
 def get_product_count():
     """Get total number of products"""
@@ -36,8 +29,7 @@ def get_all_products():
     # Get total count and calculate number of pages needed
     total_count = get_product_count()
     per_page = 250
-    total_pages = 1#math.ceil(total_count / per_page)
-    print("### ^^^^ REMOVE THIS ^^^^^")
+    total_pages = math.ceil(total_count / per_page)
     
     # Fetch each page of products
     for page in range(1, total_pages + 1):
@@ -57,7 +49,7 @@ def get_all_products():
 
 def create_feed_from_template(template_filename, products):
     template_products = _prepare_template_data(products)
-    return _render_template(template_filename, template_products)
+    return render_template(template_filename, template_products)
 
 def _prepare_template_data(products):
     # Transform products data for template
@@ -173,65 +165,6 @@ def _prepare_template_data(products):
                 raise e  # Re-raise the exception to see the full stack trace
         
     return _TEMPLATE_DATA
-
-def _render_template(template_filename, template_products):
-    # Setup Jinja environment
-    env = Environment(loader=FileSystemLoader('.'))
-    env.filters['cdata'] = _jinja_cdata
-    env.filters['url'] = _jinja_url
-    env.filters['url_image'] = _jinja_url_image
-    env.filters['limit'] = _jinja_limit
-    env.filters['money_float'] = _jinja_money_float
-    template = env.get_template(template_filename)
-
-    # Render template
-    output = template.render(
-        shop=SHOP,
-        products=template_products,
-        date=get_formatted_date()
-    )
-    
-    return output
-
-def _jinja_cdata(value):
-    if not value:
-        return value
-    return f"<![CDATA[ {value} ]]>"
-
-def _jinja_url(value):
-    #print(f"[DEBUG] Template URL filter: Making sure this is a valid URL: {value}")
-    if value:
-        value = value.replace('http://', 'https://')
-        if not value.startswith(SHOP['domain']):
-            value = f"{SHOP['domain']}{value}"
-    #print(f"[DEBUG] Template URL filter: {value}")
-    return value
-
-def _jinja_url_image(value):
-    #print(f"[DEBUG] Template Img URL filter: Making sure this is a valid image URL: {value}")
-    if value:
-        value = value.replace('/file.jpg', '/image.jpg')
-    #print(f"[DEBUG] Template Img URL filter: {value}")
-    return value
-
-def _jinja_limit(value, limit):
-    print(f"[DEBUG] Template Limit filter: {value} | {limit} | {type(value)}")
-    if isinstance(value, dict):
-        return dict(list(value.items())[:int(limit)])
-    if isinstance(value, list):
-        return value[:int(limit)]
-    else:
-        return value
-    
-def _jinja_money_float(value):
-    #print(f"[DEBUG] Template Money Float filter: '{value}'")
-    if not value:
-        return value
-    value = str(float(str(value).replace('$', '').replace(',', '')))
-    if value.endswith('.0'):
-        value = f"{value}0"
-    #print(f"[DEBUG] Template Money Float filter: New value is '{value}'")
-    return value
 
 def refresh_feed_files(cloud=False):
     # Get total products count
