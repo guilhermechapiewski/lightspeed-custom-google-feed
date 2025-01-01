@@ -27,11 +27,11 @@ Lightspeed eCom has poor support for custom feeds. For example, it's not possibl
 This is also prepared to run as a [Google App Engine](https://cloud.google.com/appengine) application. This is useful because you will want your feed to be accessible as a data source on the web for Google Merchant Center to pick up.
 
 1. In addition to all the steps above, fill in the additional configuration information (the Google Cloud Storage bucket name) in `config.py`
-2. Run `make deploy` to push to Google Cloud
-3. Hit `https://<your-project-id>.appspot.com/refresh_feed` to generate a new feed file
-4. Access the latest feed at `https://<your-project-id>.appspot.com/feed`
+2. Run `make run` to execute locally or `make deploy` to push to Google Cloud
+3. Go to `http://localhost:8080/` or `https://<your-project-id>.appspot.com/`
+4. From there you will find the URLs to access both feeds and refresh (regenerate) them (will update/override the latest version)
 
-You will need to set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to run the `refresh_feed` endpoint on a regular basis.
+You will need to set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to run the `refresh_feeds` endpoint on a regular basis.
 
 ## Lightspeed API 101
 
