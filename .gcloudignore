@@ -20,3 +20,5 @@ __pycache__/
 
 lightspeed_api_playground/
 config_TEMPLATE.py
+README.md
+gmc_*_feed.xml
