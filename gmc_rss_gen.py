@@ -224,7 +224,7 @@ def read_feed_file(filename, cloud=False):
             return "<error>Feed file not found. Please generate a feed first.</error>"
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s][%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     try:
         logger.info("Executing from command line; refreshing feed files")
         refresh_feed_files(cloud=False)
