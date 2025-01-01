@@ -1,6 +1,7 @@
 import requests
 import math
 from google.cloud import storage
+import logging
 import json
 from config import API_KEY, API_SECRET, BASE_URL, SHOP, CLOUD_STORAGE_BUCKET_NAME
 from template_utils import render_template
@@ -15,6 +16,8 @@ TEMPLATE_LOCAL_LISTINGS_FEED = 'TEMPLATE_gmc_local_listings.xml'
 LOCAL_LISTINGS_FEED_FILENAME = 'gmc_local_listings_feed.xml'
 
 _TEMPLATE_DATA = []
+
+logger = logging.getLogger(__name__)
     
 def get_product_count():
     """Get total number of products"""
@@ -43,7 +46,7 @@ def get_all_products():
         page_products = response.json()["products"]
         products.extend(page_products)
         
-        print(f"Fetched page {page}/{total_pages}")
+        logger.info(f"Fetched page {page}/{total_pages}")
         
     return products
 
@@ -125,7 +128,7 @@ def _prepare_template_data(products):
                     
                     product_categories.append(d1_cat)
                 
-                print(f"[DEBUG] Product categories for product id {product['id']}: {product_categories} (type: {type(product_categories)})")
+                logger.debug(f"[DEBUG] Product categories for product id {product['id']}: {product_categories} (type: {type(product_categories)})")
 
                 template_data = {
                     'id': product['id'],
@@ -159,9 +162,9 @@ def _prepare_template_data(products):
 
                 _TEMPLATE_DATA.append(template_data)
             except Exception as e:
-                print(f"Error processing product: {product.get('id', 'unknown')}")
-                print(f"Product data:")
-                print(json.dumps(product, indent=4))
+                logger.error(f"Error processing product: {product.get('id', 'unknown')}")
+                logger.error(f"Product data:")
+                logger.error(json.dumps(product, indent=4))
                 raise e  # Re-raise the exception to see the full stack trace
         
     return _TEMPLATE_DATA
@@ -169,23 +172,23 @@ def _prepare_template_data(products):
 def refresh_feed_files(cloud=False):
     # Get total products count
     total_count = get_product_count()
-    print(f"Total products: {total_count}")
+    logger.info(f"Total products: {total_count}")
     
     # Get all products page by page
     products = get_all_products()
-    print(f"Successfully retrieved {len(products)} products")
+    logger.info(f"Successfully retrieved {len(products)} products")
     
     # Filter visible products only
     visible_products = [p for p in products if p["isVisible"]]
-    print(f"Found {len(visible_products)} visible products")
+    logger.info(f"Found {len(visible_products)} visible products")
 
     # Generate shopping online inventory feed file
     shopping_online_inventory_feed_output = create_feed_from_template(TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, visible_products)
-    print("Shopping Online Inventory feed file generated successfully")
+    logger.info("Shopping Online Inventory feed file generated successfully")
     
     # Generate local listings feed file
     local_listings_feed_output = create_feed_from_template(TEMPLATE_LOCAL_LISTINGS_FEED, visible_products)
-    print("Local Listings feed file generated successfully")
+    logger.info("Local Listings feed file generated successfully")
 
     if cloud:
         # Save to Google Cloud Storage bucket
@@ -204,8 +207,8 @@ def refresh_feed_files(cloud=False):
         with open(LOCAL_LISTINGS_FEED_FILENAME, 'w', encoding='utf-8') as f:
             f.write(local_listings_feed_output)
 
-    print(f"Successfully generated feed file: {SHOPPING_ONLINE_INVENTORY_FEED_FILENAME}")
-    print(f"Successfully generated feed file: {LOCAL_LISTINGS_FEED_FILENAME}")
+    logger.info(f"Successfully generated feed file: {SHOPPING_ONLINE_INVENTORY_FEED_FILENAME}")
+    logger.info(f"Successfully generated feed file: {LOCAL_LISTINGS_FEED_FILENAME}")
 
 def read_feed_file(filename, cloud=False):
     if cloud:
@@ -221,8 +224,10 @@ def read_feed_file(filename, cloud=False):
             return "<error>Feed file not found. Please generate a feed first.</error>"
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     try:
-        print("Executing from command line; refreshing feed files")
+        logger.info("Executing from command line; refreshing feed files")
         refresh_feed_files(cloud=False)
     except Exception as e:
-        print(f"Error occurred: {str(e)}")
+        logger.error(f"Error occurred: {str(e)}")
+        raise e
