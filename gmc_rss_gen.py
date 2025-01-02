@@ -108,7 +108,7 @@ def prepare_template_data(products):
                 template_data = {
                     'id': product['id'],
                     'stock_level': product_stock_level,
-                    'fulltitle': f"{product_brand['title']} {product['fulltitle']}",
+                    'fulltitle': f"{product_brand['title']} {product['fulltitle']}".strip(),
                     'description': product['description'],
                     'url': product_url,
                     'available': product_stock_level > 0

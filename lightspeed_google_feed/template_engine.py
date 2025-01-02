@@ -64,10 +64,8 @@ def _jinja_limit(value, limit):
     
 def _jinja_money_float(value):
     logger.debug(f"[DEBUG] Template Money Float filter: '{value}'")
-    if not value:
-        return value
     value = str(float(str(value).replace('$', '').replace(',', '')))
-    if value.endswith('.0'):
+    if "." in value and len(value.split(".")[1]) == 1:
         value = f"{value}0"
     logger.debug(f"[DEBUG] Template Money Float filter: New value is '{value}'")
     return value
