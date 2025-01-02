@@ -38,7 +38,7 @@ def prepare_template_data(products):
 
                 product_stock_level = product_variant["stockLevel"]
                 product_url = f"{SHOP['domain']}{product['url']}.html"
-                product_images = [image['src'] for image in product.get('images', {}).values()]
+                product_images = [image['src'] for image in sorted(product.get('images', {}).values(), key=lambda x: x['sortOrder'])]
                 
                 product_price = {}
                 product_price['price_incl'] = product_variant["priceIncl"]
