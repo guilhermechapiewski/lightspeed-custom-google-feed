@@ -21,10 +21,14 @@ def save_file(filename, content, cloud=False):
 
 def read_file(filename, cloud=False):
     if cloud:
-        storage_client = storage.Client()
-        bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET_NAME)
-        blob = bucket.blob(filename)
-        return blob.download_as_string()
+        try:
+            storage_client = storage.Client()
+            bucket = storage_client.bucket(CLOUD_STORAGE_BUCKET_NAME)
+            blob = bucket.blob(filename)
+            return blob.download_as_string()
+        except Exception as e:
+            logger.error(f"Error reading file [{filename}] from Google Cloud Storage: {e}")
+            return "<error>Feed file not found. Please generate a feed first.</error>"
     else:
         try:
             with open(filename, 'r', encoding='utf-8') as f:
