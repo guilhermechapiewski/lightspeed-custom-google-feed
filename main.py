@@ -34,4 +34,5 @@ def local_listings_feed():
     return gmc_rss_gen.read_feed_file(gmc_rss_gen.LOCAL_LISTINGS_FEED_FILENAME, cloud=RUNNING_ON_CLOUD), {'Content-Type': 'application/xml'}
 
 if __name__ == "__main__":
+    # Run locally if the script is invoked directly
     app.run(host="127.0.0.1", port=8080, debug=True)
