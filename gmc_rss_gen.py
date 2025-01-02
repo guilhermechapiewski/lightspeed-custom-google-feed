@@ -7,7 +7,8 @@ TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED = 'TEMPLATE_gmc_shopping_online_inventor
 SHOPPING_ONLINE_INVENTORY_FEED_FILENAME = 'gmc_shopping_online_inventory_feed.xml'
 TEMPLATE_LOCAL_LISTINGS_FEED = 'TEMPLATE_gmc_local_listings.xml'
 LOCAL_LISTINGS_FEED_FILENAME = 'gmc_local_listings_feed.xml'
-_TEMPLATE_DATA = []
+
+_TEMPLATE_DATA = [] # Global variable to store template data avoiding multiple API calls for different feeds
 
 logger = logging.getLogger(__name__)
 
