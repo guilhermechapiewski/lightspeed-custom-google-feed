@@ -22,18 +22,20 @@ Lightspeed eCom has poor support for custom feeds. For example, it's not possibl
 2. Copy `config_TEMPLATE.py` to `config.py` and fill in the API key, secret and other configuration information
 3. Run `make feed`
 
-### Cloud environment (Google App Engine))
+### Cloud environment (Google App Engine)
 
-This is also prepared to run as a [Google App Engine](https://cloud.google.com/appengine) application. This is useful because you will want your feed to be accessible as a data source on the web for Google Merchant Center to pick up.
+This project is also prepared to run as a [Google App Engine](https://cloud.google.com/appengine) application. This is useful because you will want your feed to be accessible as a data source on the web for Google Merchant Center to pick up. To set it up:
 
 1. In addition to all the steps above, fill in the additional configuration information (the Google Cloud Storage bucket name) in `config.py`
-2. Run `make run` to execute locally or `make deploy` to push to Google Cloud
+2. Run `make run` to execute the App Engine application locally or `make deploy` to push it to Google Cloud
 3. Go to `http://localhost:8080/` or `https://<your-project-id>.appspot.com/`
 4. From there you will find the URLs to access both feeds and refresh (regenerate) them (will update/override the latest version)
 
-To refresh the feeds daily, set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to call the `refresh_feeds` endpoint on a regular basis.
+#### Setup a Google App Engine cron job to refresh feeds periodically
 
-1. Configured the provided `cron.yaml` file following the instructions in the [Google Cloud Scheduler documentation](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) (or, if you make no changes, it will run daily at 00:00 Pacific time)
+To refresh the feeds daily, set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to call the `refresh_feeds` endpoint on a regular basis:
+
+1. Configure the provided `cron.yaml` file following the instructions in the [Google Cloud Scheduler documentation](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) (or, if you make no changes, it will run daily at 00:00 Pacific time)
 2. Run `make deploy_cron`
 3. Visit the [Google Cloud Scheduler](https://console.cloud.google.com/cloudscheduler) to see the configured cron job.
 
