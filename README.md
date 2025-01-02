@@ -31,7 +31,11 @@ This is also prepared to run as a [Google App Engine](https://cloud.google.com/a
 3. Go to `http://localhost:8080/` or `https://<your-project-id>.appspot.com/`
 4. From there you will find the URLs to access both feeds and refresh (regenerate) them (will update/override the latest version)
 
-You will need to set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to run the `refresh_feeds` endpoint on a regular basis.
+To refresh the feeds daily, set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to call the `refresh_feeds` endpoint on a regular basis.
+
+1. Configured the provided `cron.yaml` file following the instructions in the [Google Cloud Scheduler documentation](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) (or, if you make no changes, it will run daily at 00:00 Pacific time)
+2. Run `make deploy_cron`
+3. Visit the [Google Cloud Scheduler](https://console.cloud.google.com/cloudscheduler) to see the configured cron job.
 
 ## Lightspeed API 101
 

@@ -1,0 +1,5 @@
+cron:
+- description: "Daily feed refresh"
+  url: /refresh_feeds
+  schedule: every day 00:00
+  timezone: America/Los_Angeles

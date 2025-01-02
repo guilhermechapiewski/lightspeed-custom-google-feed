@@ -2,6 +2,9 @@
 deploy: clean
 	gcloud app deploy
 
+deploy_cron: clean
+	gcloud app deploy cron.yaml
+
 feed: clean
 	python3 gmc_rss_gen.py
 
