@@ -1,15 +1,24 @@
 # Deploy to Google App Engine
-deploy: clean
-	gcloud app deploy
+deploy: clean check_config
+	@gcloud app deploy
 
-deploy_cron: clean
-	gcloud app deploy cron.yaml
+# Configure cron job to Google App Engine
+deploy_cron: clean check_config
+	@gcloud app deploy cron.yaml
 
-feed: clean
-	python3 gmc_rss_gen.py
+# Run Google App Engine application locally
+run: clean check_config
+	@python3 main.py
 
-run: clean
-	python3 main.py
+# Generate feeds locally
+feed: clean check_config
+	@python3 gmc_rss_gen.py
 
 clean:
-	rm -f gmc_*_feed.xml
+	@rm -f gmc_*_feed.xml
+
+check_config:
+	@if [ ! -f config.py ]; then \
+		echo "Error: config.py file is missing. Please create a config.py file (copy config_TEMPLATE.py) with required settings."; \
+		exit 1; \
+	fi
