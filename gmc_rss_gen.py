@@ -36,11 +36,12 @@ def prepare_template_data(products):
         for product in products:
             try:
                 product_variant = min(product["variants"].values(), key=lambda x: x['sortOrder'])
-
                 product_stock_level = product_variant["stockLevel"]
-
                 product_url = f"{SHOP['domain']}{product['url']}.html"
-                product_images = [image['src'] for image in sorted(product.get('images', {}).values(), key=lambda x: x['sortOrder'])]
+                
+                product_images = None
+                if product.get('images') and len(product.get('images')) > 0:
+                    product_images = [image['src'] for image in sorted(product.get('images', {}).values(), key=lambda x: x['sortOrder'])]
                 
                 product_price = {}
                 product_price['price_incl'] = product_variant["priceIncl"]
