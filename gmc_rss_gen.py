@@ -37,6 +37,7 @@ def prepare_template_data(products):
             try:
                 product_variant = min(product["variants"].values(), key=lambda x: x['sortOrder'])
                 product_stock_level = product_variant["stockLevel"]
+                product_available = product_stock_level > 0 or product_variant["stockTracking"] == "disabled"
                 product_url = f"{SHOP['domain']}{product['url']}.html"
                               
                 product_images = None
@@ -118,7 +119,7 @@ def prepare_template_data(products):
                     'fulltitle': product_fulltitle,
                     'description': product['description'],
                     'url': product_url,
-                    'available': product_stock_level > 0
+                    'available': product_available
                 }
 
                 if product_images and len(product_images) > 0:
