@@ -31,6 +31,11 @@ def read_feed_file(filename, cloud=False):
     return storage.read_file(filename, cloud)
 
 def prepare_template_data(products):
+    # Order products by product id in decrescent order
+    # (reason: allows for easier comparison between this and the Lightspeed 
+    # native feed as this seems to be the way Lightspeed orders products)
+    products.sort(key=lambda x: x['id'], reverse=True)
+
     # Transform products data for template
     if len(_TEMPLATE_DATA) == 0:
         for product in products:
