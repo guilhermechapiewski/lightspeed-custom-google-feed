@@ -38,23 +38,23 @@ def _jinja_cdata(value):
     return f"<![CDATA[ {value} ]]>"
 
 def _jinja_url(value):
-    logger.debug(f"[DEBUG] Template URL filter: Making sure this is a valid URL: {value}")
+    #logger.debug(f"Template URL filter: Making sure this is a valid URL: {value}")
     if value:
         value = value.replace('http://', 'https://')
         if not value.startswith(SHOP['domain']):
             value = f"{SHOP['domain']}{value}"
-    logger.debug(f"[DEBUG] Template URL filter: {value}")
+    #logger.debug(f"Template URL filter: {value}")
     return value
 
 def _jinja_url_image(value):
-    logger.debug(f"[DEBUG] Template Img URL filter: Making sure this is a valid image URL: {value}")
+    #logger.debug(f"Template Img URL filter: Making sure this is a valid image URL: {value}")
     if value:
         value = value.replace('/file.jpg', '/image.jpg')
-    logger.debug(f"[DEBUG] Template Img URL filter: {value}")
+    #logger.debug(f"Template Img URL filter: {value}")
     return value
 
 def _jinja_limit(value, limit):
-    logger.debug(f"[DEBUG] Template Limit filter: {value} | {limit} | {type(value)}")
+    #logger.debug(f"Template Limit filter: {value} | {limit} | {type(value)}")
     if isinstance(value, dict):
         return dict(list(value.items())[:int(limit)])
     if isinstance(value, list):
@@ -63,9 +63,9 @@ def _jinja_limit(value, limit):
         return value
     
 def _jinja_money_float(value):
-    logger.debug(f"[DEBUG] Template Money Float filter: '{value}'")
+    #logger.debug(f"Template Money Float filter: '{value}'")
     value = str(float(str(value).replace('$', '').replace(',', '')))
     if "." in value and len(value.split(".")[1]) == 1:
         value = f"{value}0"
-    logger.debug(f"[DEBUG] Template Money Float filter: New value is '{value}'")
+    #logger.debug(f"Template Money Float filter: New value is '{value}'")
     return value
