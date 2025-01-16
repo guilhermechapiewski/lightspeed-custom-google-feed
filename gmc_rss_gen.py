@@ -38,7 +38,7 @@ def prepare_template_data(products):
                 product_variant = min(product["variants"].values(), key=lambda x: x['sortOrder'])
                 product_stock_level = product_variant["stockLevel"]
                 product_url = f"{SHOP['domain']}{product['url']}.html"
-                
+                              
                 product_images = None
                 if product.get('images') and len(product.get('images')) > 0:
                     product_images = [image['src'] for image in sorted(product.get('images', {}).values(), key=lambda x: x['sortOrder'])]
@@ -52,6 +52,10 @@ def prepare_template_data(products):
                     product_brand['title'] = product['brand'].get('title', '')
                 else:
                     product_brand['title'] = ''
+
+                product_fulltitle = product['fulltitle'].strip()
+                if not product_fulltitle.startswith(product_brand['title']):
+                    product_fulltitle = f"{product_brand['title']} {product['fulltitle']}".strip()
 
                 product_categories = []
                 # First collect all categories by depth
@@ -111,7 +115,7 @@ def prepare_template_data(products):
                 template_data = {
                     'id': product['id'],
                     'stock_level': product_stock_level,
-                    'fulltitle': f"{product_brand['title']} {product['fulltitle']}".strip(),
+                    'fulltitle': product_fulltitle,
                     'description': product['description'],
                     'url': product_url,
                     'available': product_stock_level > 0
