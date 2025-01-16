@@ -55,7 +55,7 @@ def prepare_template_data(products):
                     product_brand['title'] = ''
 
                 product_fulltitle = product['fulltitle'].strip()
-                if not product_fulltitle.startswith(product_brand['title']):
+                if not product_fulltitle.lower().startswith(product_brand['title'].lower()):
                     product_fulltitle = f"{product_brand['title']} {product['fulltitle']}".strip()
 
                 product_categories = []
