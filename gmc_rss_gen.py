@@ -93,10 +93,20 @@ def prepare_template_data(products):
                         product_age_group = "kids"
                     # also translate genders from product title to attribute in the format GMC expects
                     # see https://support.google.com/merchants/answer/6324479?sjid=8143513646685484049-NC
-                    if product_fulltitle.lower().find("women") > -1:
-                        product_gender = "female"
-                    elif product_fulltitle.lower().find("men") > -1:
+                    if product_fulltitle.lower().find("men") > -1:
                         product_gender = "male"
+                    elif product_fulltitle.lower().find("women") > -1:
+                        product_gender = "female"
+                    # also check if any category is "men" or "women"
+                    if len(product.get('categories')) > 0:
+                        for category in product.get('categories', {}).values():
+                            if category.get('title', '').lower() == "men":
+                                product_gender = "male"
+                                break
+                            elif category.get('title', '').lower() == "women":
+                                product_gender = "female"
+                                break
+                    
                     # sizes are expected to be in the format XXS, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL
                     # see https://support.google.com/merchants/answer/6324492?sjid=8143513646685484049-NC
                     if product_size.startswith("2 xs"):
