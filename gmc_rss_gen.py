@@ -214,7 +214,9 @@ def prepare_template_data(products):
                     if product_variant.get('weight'):
                         template_data['weight'] = product_variant['weight']
                     else:
-                        template_data['weight'] = 0
+                        # default weight for products without weight
+                        # it seems that GMC expects a weight for all products and 0 is not accepted
+                        template_data['weight'] = 10
 
                     _TEMPLATE_DATA.append(template_data)
                 except Exception as e:
