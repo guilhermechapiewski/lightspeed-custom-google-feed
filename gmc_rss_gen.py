@@ -216,7 +216,8 @@ def prepare_template_data(products):
                     else:
                         # default weight for products without weight
                         # it seems that GMC expects a weight for all products and 0 is not accepted
-                        template_data['weight'] = 10
+                        # 25g is ~ 0.1oz, which is the minimum weight accepted by UPS ground
+                        template_data['weight'] = 25
 
                     _TEMPLATE_DATA.append(template_data)
                 except Exception as e:
