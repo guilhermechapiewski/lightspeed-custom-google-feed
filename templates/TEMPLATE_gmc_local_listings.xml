@@ -11,6 +11,12 @@
                 <g:webitemid>{{ product.id }}</g:webitemid>
                 <g:store_code>{{ shop.store_code }}</g:store_code>
                 <g:quantity>{{ product.stock_level }}</g:quantity>
+            {% if product.price.price_old_incl %}
+                <g:price>{{ product.price.price_old_incl | money_float }} {{ shop.currency | upper }}</g:price>
+                <g:sale_price>{{ product.price.price_incl | money_float }} {{ shop.currency | upper }}</g:sale_price>
+            {% else %}
+                <g:price>{{ product.price.price_incl | money_float }} {{ shop.currency | upper }}</g:price>
+            {% endif %}
             {% if product.available %}
                 <g:availability>in_stock</g:availability>
                 <g:pickup_SLA>same_day</g:pickup_SLA>
