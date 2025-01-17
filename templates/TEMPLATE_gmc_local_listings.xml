@@ -11,15 +11,18 @@
                 <g:webitemid>{{ product.id }}</g:webitemid>
                 <g:store_code>{{ shop.store_code }}</g:store_code>
                 <g:quantity>{{ product.stock_level }}</g:quantity>
-                {% if product.available %}
-                    <g:availability>in_stock</g:availability>
-                    <g:pickup_SLA>same_day</g:pickup_SLA>
-                    <g:pickup_method>buy</g:pickup_method>
-                {% else %}
-                    <g:availability>out_of_stock</g:availability>
-                    <g:pickup_SLA>3-day</g:pickup_SLA>
-                    <g:pickup_method>buy</g:pickup_method>
-                {% endif %}
+                <g:gtin>{{ product.ean | cdata }}</g:gtin>
+                <g:mpn>{{ product.code | cdata }}</g:mpn>
+                <g:shipping_weight>{{ product.weight }} g</g:shipping_weight>
+            {% if product.available %}
+                <g:availability>in_stock</g:availability>
+                <g:pickup_SLA>same_day</g:pickup_SLA>
+                <g:pickup_method>buy</g:pickup_method>
+            {% else %}
+                <g:availability>out_of_stock</g:availability>
+                <g:pickup_SLA>3-day</g:pickup_SLA>
+                <g:pickup_method>buy</g:pickup_method>
+            {% endif %}
             </item>
         {% endfor %}
     </channel>
