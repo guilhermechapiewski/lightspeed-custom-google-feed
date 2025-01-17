@@ -37,7 +37,7 @@ def prepare_template_data(products):
             logger.debug(f"Product: {product['id']} has {len(product['variants'])} variants")
             for product_variant in product["variants"].values():
                 try:
-                    product_id = f"{product['id']}-{product_variant['id']}"
+                    product_id = f"{product['id']}_{product_variant['id']}"
                     product_item_group_id = product['id']
                     product_stock_level = product_variant.get("stockLevel")
                     product_available = product_stock_level > 0 or product_variant.get("stockTracking") == "disabled"
