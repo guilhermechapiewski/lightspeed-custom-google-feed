@@ -38,6 +38,7 @@ def prepare_template_data(products):
             for product_variant in product["variants"].values():
                 try:
                     product_id = f"{product['id']}-{product_variant['id']}"
+                    product_item_group_id = product['id']
                     product_stock_level = product_variant.get("stockLevel")
                     product_available = product_stock_level > 0 or product_variant.get("stockTracking") == "disabled"
                     product_url = f"{SHOP['domain']}{product['url']}.html"
@@ -182,6 +183,7 @@ def prepare_template_data(products):
 
                     template_data = {
                         'id': product_id,
+                        'item_group_id': product_item_group_id,
                         'stock_level': product_stock_level,
                         'fulltitle': product_fulltitle,
                         'description': product['description'],

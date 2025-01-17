@@ -8,6 +8,7 @@
         {% for product in products %}
             <item>
                 <g:id>{{ product.id }}</g:id>
+                <g:item_group_id>{{ product.item_group_id }}</g:item_group_id>
                 <g:quantity>{{ product.stock_level }}</g:quantity>
                 <title>{{ product.fulltitle | cdata }}</title>
                 <description>{{ product.description | cdata }}</description>
