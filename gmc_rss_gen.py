@@ -56,6 +56,7 @@ def prepare_template_data(products):
                     else:
                         product_brand['title'] = ''
 
+                    variant_attributes = {}
                     product_fulltitle = product['fulltitle'].strip()
                     # add brand title to fulltitle if not already present
                     if not product_fulltitle.lower().startswith(product_brand['title'].lower()):
@@ -68,16 +69,64 @@ def prepare_template_data(products):
                         variant_values = []
                         for p in product_variant['title'].split(','):
                             try:
+                                key = p.split(':')[0].replace('"', '').strip()
                                 value = p.split(':')[1].replace('"', '').strip()
                                 variant_values.append(value)
+                                variant_attributes[key] = value
                             except IndexError:
                                 # If no colon found, use the whole string
                                 value = p.replace('"', '').strip()
                                 variant_values.append(value)
                         product_fulltitle = f"{product_fulltitle} ({', '.join(variant_values)})"
 
+                    # additional attributes needed by GMC to show in certain categories+countries
+                    # unfortunately given how variantes are created, the attributes are in text form 
+                    # and we can't always rely on them to have the correct attributes
+                    product_color = variant_attributes.get("Color", "").lower()
+                    product_size = variant_attributes.get("Size", "").lower()
+                    product_gender = variant_attributes.get("Gender", "Unisex").lower()
+                    product_age_group = variant_attributes.get("Age Group", "Adult").lower()
+                    # while products are typically denominated as "youth", GMC expects "kids"
+                    # see https://support.google.com/merchants/answer/6324463?sjid=8143513646685484049-NC
+                    if product_fulltitle.lower().find("youth") > -1:
+                        product_age_group = "kids"
+                    # also translate genders from product title to attribute in the format GMC expects
+                    # see https://support.google.com/merchants/answer/6324479?sjid=8143513646685484049-NC
+                    if product_fulltitle.lower().find("women") > -1:
+                        product_gender = "female"
+                    elif product_fulltitle.lower().find("men") > -1:
+                        product_gender = "male"
+                    # sizes are expected to be in the format XXS, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL
+                    # see https://support.google.com/merchants/answer/6324492?sjid=8143513646685484049-NC
+                    if product_size.startswith("2 xs"):
+                        product_size = "XXS"
+                    elif product_size.startswith("extra small") or product_size.startswith("x small"):
+                        product_size = "XS"
+                    elif product_size.startswith("small"):
+                        product_size = "S"
+                    elif product_size.startswith("medium"):
+                        product_size = "M"
+                    elif product_size.startswith("large"):
+                        product_size = "L"
+                    elif product_size.startswith("extra large") or product_size.startswith("x large"):
+                        product_size = "XL"
+                    elif product_size.startswith("2 xl"):
+                        product_size = "2XL"
+                    elif product_size.startswith("3 xl"):
+                        product_size = "3XL"
+                    elif product_size.startswith("4 xl"):
+                        product_size = "4XL"
+                    elif product_size.startswith("5 xl"):
+                        product_size = "5XL"
+                    elif product_size.startswith("6 xl"):
+                        product_size = "6XL"
+                    else:
+                        product_size = variant_attributes.get("Size", "")
+
+                    # build the list of product categories, translating from the Lightspeed 
+                    # category structure to what GMC expects
                     product_categories = []
-                    # First collect all categories by depth
+                    # first, collect all categories by depth
                     depth1_cats = []
                     depth2_cats = []
                     depth3_cats = []
@@ -137,7 +186,11 @@ def prepare_template_data(products):
                         'fulltitle': product_fulltitle,
                         'description': product['description'],
                         'url': product_url,
-                        'available': product_available
+                        'available': product_available,
+                        'color': product_color,
+                        'size': product_size,
+                        'gender': product_gender,
+                        'age_group': product_age_group
                     }
 
                     if product_images and len(product_images) > 0:

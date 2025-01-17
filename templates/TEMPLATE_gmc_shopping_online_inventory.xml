@@ -59,6 +59,18 @@
                 {% if product.brand %}
                     <g:brand>{{ product.brand.title | cdata }}</g:brand>
                 {% endif %}
+                {% if product.age_group %}
+                    <g:age_group>{{ product.age_group }}</g:age_group>
+                {% endif %}
+                {% if product.color %}
+                    <g:color>{{ product.color }}</g:color>
+                {% endif %}
+                {% if product.gender %}
+                    <g:gender>{{ product.gender }}</g:gender>
+                {% endif %}
+                {% if product.size %}
+                    <g:size>{{ product.size }}</g:size>
+                {% endif %}
                 <g:condition>new</g:condition>
                 <g:gtin>{{ product.ean | cdata }}</g:gtin>
                 <g:mpn>{{ product.code | cdata }}</g:mpn>
