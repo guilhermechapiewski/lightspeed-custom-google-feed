@@ -25,6 +25,9 @@
                 <g:pickup_SLA>3-day</g:pickup_SLA>
                 <g:pickup_method>buy</g:pickup_method>
             {% endif %}
+                <g:gtin>{{ product.ean | cdata }}</g:gtin>
+                <g:mpn>{{ product.code | cdata }}</g:mpn>
+                <g:shipping_weight>{{ product.weight }} g</g:shipping_weight>
             </item>
         {% endfor %}
     </channel>
