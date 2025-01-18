@@ -8,7 +8,6 @@
         {% for product in products %}
             <item>
                 <g:id>{{ product.id }}</g:id>
-                <g:webitemid>{{ product.id }}</g:webitemid>
                 <g:store_code>{{ shop.store_code }}</g:store_code>
                 <g:quantity>{{ product.stock_level }}</g:quantity>
             {% if product.price.price_old_incl %}
