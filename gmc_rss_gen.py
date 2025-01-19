@@ -93,9 +93,9 @@ def prepare_template_data(products):
                         product_age_group = "kids"
                     # also translate genders from product title to attribute in the format GMC expects
                     # see https://support.google.com/merchants/answer/6324479?sjid=8143513646685484049-NC
-                    if product_fulltitle.lower().find("men") > -1:
+                    if product_fulltitle.lower().find(" men ") > -1 or product_fulltitle.lower().find(" men's ") > -1:
                         product_gender = "male"
-                    elif product_fulltitle.lower().find("women") > -1:
+                    elif product_fulltitle.lower().find(" women ") > -1 or product_fulltitle.lower().find(" women's ") > -1:
                         product_gender = "female"
                     # also check if any category is "men" or "women"
                     if len(product.get('categories')) > 0:
