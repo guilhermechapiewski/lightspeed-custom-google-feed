@@ -29,3 +29,10 @@ create_deployment_info:
 	@echo "# AUTO-GENERATED file - run 'make deploy' or 'make create_deployment_info' to update" > version.py
 	@echo "git_commit = '`git rev-parse HEAD`'" >> version.py
 	@echo "deploy_timestamp = '`date '+%Y-%m-%d %H:%M:%S'`'" >> version.py
+
+remote_refresh_feeds:
+	@echo "Refreshing feeds on remote server..."
+	@FEED_SERVER=`gcloud app describe | grep -e defaultHostname | cut -d ":" -f 2 | cut -d " " -f 2`; \
+	echo "Server = $$FEED_SERVER"; \
+	curl "https://$$FEED_SERVER/refresh_feeds"
+	@echo "\nDone."
