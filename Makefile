@@ -15,24 +15,28 @@ run: clean check_config
 feed: clean check_config
 	@python3 gmc_rss_gen.py
 
-clean:
-	@rm -f gmc_*_feed.xml
-
-check_config:
-	@if [ ! -f config.py ]; then \
-		echo "Error: config.py file is missing. Please create a config.py file (copy config_TEMPLATE.py) with required settings."; \
-		exit 1; \
-	fi
-
-create_deployment_info:
-	@echo "Creating/updating version.py with latest git commit version and timestamp..."
-	@echo "# AUTO-GENERATED file - run 'make deploy' or 'make create_deployment_info' to update" > version.py
-	@echo "git_commit = '`git rev-parse HEAD`'" >> version.py
-	@echo "deploy_timestamp = '`date '+%Y-%m-%d %H:%M:%S'`'" >> version.py
-
+# Refresh feeds on remote server
 remote_refresh_feeds:
 	@echo "Refreshing feeds on remote server..."
 	@FEED_SERVER=`gcloud app describe | grep -e defaultHostname | cut -d ":" -f 2 | cut -d " " -f 2`; \
 	echo "Server = $$FEED_SERVER"; \
 	curl "https://$$FEED_SERVER/refresh_feeds"
 	@echo "\nDone."
+
+# Clean up generated feeds
+clean:
+	@rm -f gmc_*_feed.xml
+
+# Check if config.py file exists
+check_config:
+	@if [ ! -f config.py ]; then \
+		echo "Error: config.py file is missing. Please create a config.py file (copy config_TEMPLATE.py) with required settings."; \
+		exit 1; \
+	fi
+
+# Create/update version.py with latest git commit version and timestamp
+create_deployment_info:
+	@echo "Creating/updating version.py with latest git commit version and timestamp..."
+	@echo "# AUTO-GENERATED file - run 'make deploy' or 'make create_deployment_info' to update" > version.py
+	@echo "git_commit = '`git rev-parse HEAD`'" >> version.py
+	@echo "deploy_timestamp = '`date '+%Y-%m-%d %H:%M:%S'`'" >> version.py
