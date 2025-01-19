@@ -59,6 +59,8 @@ def prepare_template_data(products):
 
                     variant_attributes = {}
                     product_fulltitle = product['fulltitle'].strip()
+                    if product_fulltitle.isupper():
+                        product_fulltitle = product_fulltitle.title()
                     # add brand title to fulltitle if not already present
                     if not product_fulltitle.lower().startswith(product_brand['title'].lower()):
                         product_fulltitle = f"{product_brand['title']} {product['fulltitle']}".strip()
@@ -79,7 +81,6 @@ def prepare_template_data(products):
                                 value = p.replace('"', '').strip()
                                 variant_values.append(value)
                         product_fulltitle = f"{product_fulltitle} ({', '.join(variant_values)})"
-
                     # additional attributes needed by GMC to show in certain categories+countries
                     # unfortunately given how variantes are created, the attributes are in text form 
                     # and we can't always rely on them to have the correct attributes
