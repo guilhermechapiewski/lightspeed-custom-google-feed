@@ -15,10 +15,12 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 elif os.getenv('GAE_ENV', '').startswith('flex'):
     RUNNING_ON_CLOUD = True
 
+rss_gen = gmc_rss_gen.GMCRSSGenerator(cloud=RUNNING_ON_CLOUD)
+
 @app.route("/")
 def root():
     return f'''
-Google Merchant Center Feed Generator for Lightspeed eCom<br>
+Google Merchant Center Feed Generator for Lightspeed eCom C-Series<br>
 <a href="https://github.com/guilhermechapiewski/lightspeed-custom-google-feed#lightspeed-custom-google-feed">Documentation</a> | 
 <a href="/shopping_online_inventory_feed">Shopping Online Inventory Feed</a> | 
 <a href="/local_listings_feed">Local Listings Feed</a> | 
@@ -28,16 +30,16 @@ Google Merchant Center Feed Generator for Lightspeed eCom<br>
 
 @app.route("/refresh_feeds")
 def refresh_feeds():
-    gmc_rss_gen.refresh_feed_files(cloud=RUNNING_ON_CLOUD)
+    rss_gen.refresh_feed_files()
     return "New RSS feed files are ready.<br><a href='/'>Back to home</a>"
 
 @app.route("/shopping_online_inventory_feed")
 def shopping_online_inventory_feed():
-    return gmc_rss_gen.read_feed_file(gmc_rss_gen.SHOPPING_ONLINE_INVENTORY_FEED_FILENAME, cloud=RUNNING_ON_CLOUD), {'Content-Type': 'application/xml'}
+    return rss_gen.read_feed_file(rss_gen.SHOPPING_ONLINE_INVENTORY_FEED_FILENAME), {'Content-Type': 'application/xml'}
 
 @app.route("/local_listings_feed")
 def local_listings_feed():
-    return gmc_rss_gen.read_feed_file(gmc_rss_gen.LOCAL_LISTINGS_FEED_FILENAME, cloud=RUNNING_ON_CLOUD), {'Content-Type': 'application/xml'}
+    return rss_gen.read_feed_file(rss_gen.LOCAL_LISTINGS_FEED_FILENAME), {'Content-Type': 'application/xml'}
 
 if __name__ == "__main__":
     # Run locally if the script is invoked directly

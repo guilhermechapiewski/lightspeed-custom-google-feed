@@ -40,3 +40,12 @@ create_deployment_info:
 	@echo "# AUTO-GENERATED file - run 'make deploy' or 'make create_deployment_info' to update" > version.py
 	@echo "git_commit = '`git rev-parse HEAD`'" >> version.py
 	@echo "deploy_timestamp = '`date '+%Y-%m-%d %H:%M:%S'`'" >> version.py
+
+# Install development requirements
+install_requirements:
+	@pip3 install -r requirements.txt
+	@pip3 install -r requirements-dev.txt
+
+# Run tests
+test:
+	@nose2 --with-coverage
