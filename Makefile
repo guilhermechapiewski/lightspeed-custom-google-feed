@@ -48,4 +48,8 @@ install_requirements:
 
 # Run tests
 test:
+	@nose2
+
+# Run tests with coverage
+test_coverage:
 	@nose2 --with-coverage
