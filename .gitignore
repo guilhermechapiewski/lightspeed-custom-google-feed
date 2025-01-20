@@ -4,3 +4,4 @@ lightspeed_api_playground/
 gmc_*_feed.xml
 version.py
 .coverage
+test.xml
