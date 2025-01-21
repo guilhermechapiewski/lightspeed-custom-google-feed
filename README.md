@@ -19,8 +19,9 @@ Lightspeed eCom has poor support for custom feeds. For example, it's not possibl
 ### Local environment
 
 1. Clone the repository
-2. Copy `config_TEMPLATE.py` to `config.py` and fill in the API key, secret and other configuration information
-3. Run `make feed`
+2. Copy `lightspeed_google_feed/config_TEMPLATE.py` to `lightspeed_google_feed/config.py` and fill in the API key, secret and other configuration information
+3. Run `make install_requirements` to install the required dependencies
+4. Finally, run `make feed` to generate the feed files in the project root directory
 
 ### Cloud environment (Google App Engine)
 
@@ -33,11 +34,12 @@ This project is also prepared to run as a [Google App Engine](https://cloud.goog
 
 #### Setup a Google App Engine cron job to refresh feeds periodically
 
-To refresh the feeds periodically, set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to call the `refresh_feeds` endpoint on a regular basis:
+To refresh the feeds periodically, set up a [cron job in Google Cloud](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) to call the `https://<your-project-id>.appspot.com/refresh_feeds` endpoint on a regular basis:
 
 1. Configure the provided `cron.yaml` file following the instructions in the [Google Cloud Scheduler documentation](https://cloud.google.com/scheduler/docs/schedule-run-cron-job) (or, if you make no changes, it will run daily at 00:00 Pacific time)
 2. Run `make deploy_cron`
 3. Visit the [Google Cloud Scheduler](https://console.cloud.google.com/cloudscheduler) to see the configured cron job.
+4. You can also run `make remote_refresh_feeds` to refresh the feeds on the remote server from your local command line
 
 ## Lightspeed API 101
 
