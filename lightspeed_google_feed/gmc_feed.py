@@ -99,6 +99,7 @@ class GMCFeedProduct:
         self.code = ""
         self.description = ""
         self.categories = {}
+        self.delivery_date_message = {}
         # default weight for products without weight
         # it seems that GMC expects a weight for all products and 0 is not accepted
         # 25g is ~ 0.1oz, which is the minimum weight accepted by UPS ground
@@ -248,7 +249,7 @@ class GMCFeedProduct:
         return age_group
     
     def is_available(self):
-        return self.stock_level > 0 or self.stock_tracking == "disabled"
+        return self.stock_level > 0 or self.stock_tracking == "disabled" or self.stock_tracking == "indicator"
     
     def get_fulltitle(self):
         fulltitle = self.title
@@ -329,6 +330,26 @@ class GMCFeedProduct:
         
         self.logger.debug(f"Product categories for product id {self.id}_{self.variant_id}: {product_categories} (type: {type(product_categories)})")
         return product_categories
+
+    def set_delivery_date_message_in_stock(self, delivery_date_message):
+        self.delivery_date_message["in_stock"] = delivery_date_message
+
+    def set_delivery_date_message_out_of_stock(self, delivery_date_message):
+        self.delivery_date_message["out_of_stock"] = delivery_date_message
+    
+    def get_delivery_date_message(self):
+        if self.stock_tracking == "indicator":
+            return self.delivery_date_message
+        else:
+            return None
+        
+    def get_pickup_SLA(self):
+        # pickup SLA must be in the format accepted by GMC
+        # see https://support.google.com/merchants/answer/14635400?hl=en&ref_topic=15161225&sjid=7328843357097372161-NC
+        if self.stock_level > 0:
+            return "same_day"
+        else:
+            return "multi-week"
         
     def get_template_data(self):
         ''' Encapsulates how to create the template data from a product object '''
@@ -353,5 +374,7 @@ class GMCFeedProduct:
             'size': self.get_size(),
             'gender': self.get_gender(),
             'age_group': self.get_age_group(),
-            'categories': self.get_categories()
+            'categories': self.get_categories(),
+            'delivery_date_message': self.get_delivery_date_message(),
+            'pickup_SLA': self.get_pickup_SLA()
         }

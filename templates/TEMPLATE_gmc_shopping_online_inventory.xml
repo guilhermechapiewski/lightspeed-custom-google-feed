@@ -44,11 +44,11 @@
                 ]]></g:product_type>
                 {% if product.available %}
                     <g:availability>in_stock</g:availability>
-                    <g:pickup_SLA>same_day</g:pickup_SLA>
+                    <g:pickup_SLA>{{ product.pickup_SLA }}</g:pickup_SLA>
                     <g:pickup_method>buy</g:pickup_method>
                 {% else %}
                     <g:availability>out_of_stock</g:availability>
-                    <g:pickup_SLA>3-day</g:pickup_SLA>
+                    <g:pickup_SLA>{{ product.pickup_SLA }}</g:pickup_SLA>
                     <g:pickup_method>buy</g:pickup_method>
                 {% endif %}
                 {% if product.price.price_old_incl %}

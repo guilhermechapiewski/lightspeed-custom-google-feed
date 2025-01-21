@@ -3,14 +3,20 @@ from unittest.mock import patch, Mock
 from lightspeed_google_feed.gmc_feed import GMCFeedGenerator, GMCFeedProduct
 
 class TestGMCFeedGenerator(unittest.TestCase):
+    
     def setUp(self):
         """Set up test fixtures before each test method."""
         self.feed_gen = GMCFeedGenerator()
         self.count_response = Mock()
         self.count_response.json.return_value =  eval('{"count": 1}')
-        self.catalog_response = Mock()
+        self.catalog_response_fox_ranger_glove = Mock()
+        self.catalog_response_yeti_160e_c2 = Mock()
+        
         with open('tests/mock_api_responses/catalog_65626325_fox-ranger-glove.json') as f:
-            self.catalog_response.json.return_value = eval(f.read().replace('true', 'True').replace('false', 'False').replace('null', 'None'))
+            self.catalog_response_fox_ranger_glove.json.return_value = eval(f.read().replace('true', 'True').replace('false', 'False').replace('null', 'None'))
+        
+        with open('tests/mock_api_responses/catalog_65725829_Yeti-Cycles-160E-C2.json') as f:
+            self.catalog_response_yeti_160e_c2.json.return_value = eval(f.read().replace('true', 'True').replace('false', 'False').replace('null', 'None'))
         
     def tearDown(self):
         """Clean up after each test method."""
@@ -18,7 +24,7 @@ class TestGMCFeedGenerator(unittest.TestCase):
     
     @patch('lightspeed_google_feed.lightspeed.requests')
     def test_refresh_feed_files(self, mock_requests):
-        mock_requests.get.side_effect = [self.count_response, self.catalog_response]
+        mock_requests.get.side_effect = [self.count_response, self.catalog_response_fox_ranger_glove]
 
         # Execute and check mock requests were called only twice
         self.feed_gen.refresh_feed_files()
@@ -38,7 +44,7 @@ class TestGMCFeedGenerator(unittest.TestCase):
     
     @patch('lightspeed_google_feed.lightspeed.requests')
     def test_prepare_template_data_basic(self, mock_requests):
-        mock_requests.get.side_effect = [self.count_response, self.catalog_response]
+        mock_requests.get.side_effect = [self.count_response, self.catalog_response_fox_ranger_glove]
 
         products = self.feed_gen.lightspeed_api.get_all_visible_products()
         products_for_template = self.feed_gen.template_data.prepare_template_data(products)
@@ -55,7 +61,7 @@ class TestGMCFeedGenerator(unittest.TestCase):
     
     @patch('lightspeed_google_feed.lightspeed.requests')
     def test_prepare_template_data_title_and_size_conversions(self, mock_requests):
-        mock_requests.get.side_effect = [self.count_response, self.catalog_response]
+        mock_requests.get.side_effect = [self.count_response, self.catalog_response_fox_ranger_glove]
         products = self.feed_gen.lightspeed_api.get_all_visible_products()
         products_for_template = self.feed_gen.template_data.prepare_template_data(products)
 
@@ -83,6 +89,24 @@ class TestGMCFeedGenerator(unittest.TestCase):
             elif product['id'] == "65626325_110095763":
                 self.assertEqual("XL", product['size'])
                 self.assertEqual("hunter green", product['color'])
+    
+    @patch('lightspeed_google_feed.lightspeed.requests')
+    def test_prepare_template_data_with_backordered_products(self, mock_requests):
+        mock_requests.get.side_effect = [self.count_response, self.catalog_response_yeti_160e_c2]
+        products = self.feed_gen.lightspeed_api.get_all_visible_products()
+        products_for_template = self.feed_gen.template_data.prepare_template_data(products)
+
+        for product in products_for_template:
+            self.assertTrue(product['fulltitle'].startswith('Yeti Cycles 160E C2'))
+
+            if product['id'] == "65725829_110255696":
+                self.assertEqual("XL", product['size'])
+                self.assertEqual("rhino", product['color'])
+                self.assertEqual(0, product['stock_level'])
+            elif product['id'] == "65725829_110249935":
+                self.assertEqual("M", product['size'])
+                self.assertEqual("rhino", product['color'])
+                self.assertEqual(1, product['stock_level'])
 
 class TestGMCFeedProduct(unittest.TestCase):
 
@@ -281,6 +305,50 @@ class TestGMCFeedProduct(unittest.TestCase):
         self.assertEqual(template_categories[0]["title"], "Men", "Expected first category to be Men")
         self.assertEqual(template_categories[0]["subs"][0]["title"], "MTB gear", "Expected first subcategory to be MTB gear")
         self.assertEqual(template_categories[0]["subs"][0]["subs"][0]["title"], "Gloves", "Expected subcategory's subcategory to be Gloves")
+    
+    def test_backordered_products_have_special_availability_status_and_delivery_date(self):
+        product = GMCFeedProduct(id="123", variant_id="456")
+        product.set_delivery_date_message_in_stock("1-3 days")
+        product.set_delivery_date_message_out_of_stock("6-9 days")
+
+        product.set_stock_level(0)
+        product.set_stock_tracking("enabled")
+        self.assertFalse(product.is_available(), "Expected product to be unavailable")
+        self.assertIsNone(product.get_delivery_date_message(), "Expected delivery date message to be None")
+        self.assertEqual(product.get_pickup_SLA(), "multi-week", "Expected pickup SLA to be multi-week")
+
+        product.set_stock_level(1)
+        product.set_stock_tracking("enabled")
+        self.assertTrue(product.is_available(), "Expected product to be available")
+        self.assertIsNone(product.get_delivery_date_message(), "Expected delivery date message to be None")
+        self.assertEqual(product.get_pickup_SLA(), "same_day", "Expected pickup SLA to be same_day")
+
+        product.set_stock_level(0)
+        product.set_stock_tracking("disabled")
+        self.assertTrue(product.is_available(), "Expected product to be available if stock tracking is disabled, regardless of stock level")
+        self.assertIsNone(product.get_delivery_date_message(), "Expected delivery date message to be None")
+        self.assertEqual(product.get_pickup_SLA(), "multi-week", "Expected pickup SLA to be multi-week")
+
+        product.set_stock_level(1)
+        product.set_stock_tracking("disabled")
+        self.assertTrue(product.is_available(), "Expected product to be available if stock tracking is disabled, regardless of stock level")
+        self.assertIsNone(product.get_delivery_date_message(), "Expected delivery date message to be None")
+        self.assertEqual(product.get_pickup_SLA(), "same_day", "Expected pickup SLA to be same_day")
+
+        product.set_stock_level(0)
+        product.set_stock_tracking("indicator")
+        self.assertTrue(product.is_available(), "Expected product to be available")
+        self.assertIsNotNone(product.get_delivery_date_message(), "Expected delivery date message to not be None")
+        self.assertEqual(product.get_delivery_date_message(), {"in_stock": "1-3 days", "out_of_stock": "6-9 days"}, "Expected delivery date message to be a dictionary with the values set")
+        self.assertEqual(product.get_pickup_SLA(), "multi-week", "Expected pickup SLA to be multi-week")
+        
+        product.set_stock_level(1)
+        product.set_stock_tracking("indicator")
+        self.assertTrue(product.is_available(), "Expected product to be available")
+        self.assertIsNotNone(product.get_delivery_date_message(), "Expected delivery date message to not be None")
+        self.assertEqual(product.get_delivery_date_message(), {"in_stock": "1-3 days", "out_of_stock": "6-9 days"}, "Expected delivery date message to be a dictionary with the values set")
+        self.assertEqual(product.get_pickup_SLA(), "same_day", "Expected pickup SLA to be same_day")
+
 
 if __name__ == '__main__':
     unittest.main() 
