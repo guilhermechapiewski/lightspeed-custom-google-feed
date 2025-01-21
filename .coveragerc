@@ -6,6 +6,8 @@ exclude_lines =
     raise NotImplementedError  # Exclude NotImplementedError statements
 
 omit =
-    config_TEMPLATE.py
+    config*.py
     version.py
     main.py
+    tests/*
+    */__init__.py
