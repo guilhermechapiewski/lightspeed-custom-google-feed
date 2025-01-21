@@ -5,6 +5,7 @@
         <title>{{ shop.title | cdata }}</title>
         <link>{{ shop.domain }}</link>
         <description>{{ shop.description | cdata }}</description>
+        <g:quantity>{{ product.stock_level }}</g:quantity>
         {% for product in products %}
             <item>
                 <g:id>{{ product.id }}</g:id>
