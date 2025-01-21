@@ -355,7 +355,3 @@ class GMCFeedProduct:
             'age_group': self.get_age_group(),
             'categories': self.get_categories()
         }
-    
-
-    def __str__(self):
-        return f"GMCProduct(id={self.id})"
