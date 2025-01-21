@@ -189,13 +189,13 @@ class GMCFeedProduct:
             size = "XXS"
         elif size.startswith("extra small") or size.startswith("x small"):
             size = "XS"
-        elif size.startswith("small"):
+        elif size.startswith("small") or size.startswith("youth small"):
             size = "S"
-        elif size.startswith("medium"):
+        elif size.startswith("medium") or size.startswith("youth medium"):
             size = "M"
-        elif size.startswith("large"):
+        elif size.startswith("large") or size.startswith("youth large"):
             size = "L"
-        elif size.startswith("extra large") or size.startswith("x large"):
+        elif size.startswith("extra large") or size.startswith("x large") or size.startswith("youth extra large") or size.startswith("youth xl"):
             size = "XL"
         elif size.startswith("2 xl"):
             size = "2XL"
@@ -207,14 +207,6 @@ class GMCFeedProduct:
             size = "5XL"
         elif size.startswith("6 xl"):
             size = "6XL"
-        elif size.startswith("youth small"):
-            size = "S"
-        elif size.startswith("youth medium"):
-            size = "M"
-        elif size.startswith("youth large"):
-            size = "L"
-        elif size.startswith("youth extra large") or size.startswith("youth xl"):
-            size = "XL"
         else:
             size = self.variant_attributes.get("Size", "")
             
