@@ -2,7 +2,7 @@
 
 ## What is this?
 
-A Python script + Google App Engine app that will fetch all of your products from your Lightspeed account/website using the [Lightspeed eCom API](https://developers.lightspeedhq.com/ecom/introduction/introduction/) and generate RSS feeds following the [Google Merchant Center Local Listings](https://support.google.com/merchants/answer/14779112?hl=en) and [Google Merchant Center Online Inventory](https://support.google.com/merchants/answer/14779112?hl=en) file format.
+A Python script + Google App Engine app that will fetch all of your products from your Lightspeed account/website using the [Lightspeed eCom API](https://developers.lightspeedhq.com/ecom/introduction/introduction/) and generate RSS feeds following the [Google Merchant Center Local Listings](https://support.google.com/merchants/answer/14779112?hl=en) and [Google Merchant Center Online Inventory](https://support.google.com/merchants/answer/7052112?hl=en) specifications.
 
 Two feeds are generated:
 1. One for *Google Shopping online inventory*: all products available for sale in your ecommerce website/catalog.
