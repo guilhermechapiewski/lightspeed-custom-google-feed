@@ -215,6 +215,11 @@ class TestGMCFeedProduct(unittest.TestCase):
         product.set_stock_level(0)
         product.set_stock_tracking("disabled")
         self.assertTrue(product.is_available(), "Expected product to be available")
+    
+    def test_categories(self):
+        product = GMCFeedProduct(id="123", variant_id="456")
+        product.set_categories({"4568213": { "id": 4568213, "isVisible": True, "depth": 2, "sortOrder": 1, "title": "MTB gear" }})
+        self.assertEqual(product.get_categories(), ["MTB gear"], "Expected categories to be MTB gear")
 
 if __name__ == '__main__':
     unittest.main() 
