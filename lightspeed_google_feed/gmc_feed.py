@@ -218,9 +218,10 @@ class GMCFeedProduct:
         
         # find genders in product title and translate to attribute in the format GMC expects
         # see https://support.google.com/merchants/answer/6324479?sjid=8143513646685484049-NC
-        if self.get_fulltitle().lower().find(" men ") > -1 or self.get_fulltitle().lower().find(" men's ") > -1:
+        ft = self.get_fulltitle().lower()
+        if ft.find(" men ") > -1 or ft.find(" men's ") > -1 or ft.endswith(" men") or ft.endswith(" men's"):
             gender = "male"
-        elif self.get_fulltitle().lower().find(" women ") > -1 or self.get_fulltitle().lower().find(" women's ") > -1:
+        elif ft.find(" women ") > -1 or ft.find(" women's ") > -1 or ft.endswith(" women") or ft.endswith(" women's"):
             gender = "female"
         
         # also check if any category is "men" or "women"
@@ -260,8 +261,8 @@ class GMCFeedProduct:
         if not fulltitle.lower().startswith(self.brand_title.lower()):
             fulltitle = f"{self.brand_title} {fulltitle}".strip()
         
-        # add variant title to fulltitle if variant title is not "default"
-        if self.variant_title.lower() != "default":
+        # add variant values to fulltitle (which are the product specifications)
+        if len(self.variant_values) > 0:
             fulltitle = f"{fulltitle} ({', '.join(self.variant_values)})"
 
         return fulltitle

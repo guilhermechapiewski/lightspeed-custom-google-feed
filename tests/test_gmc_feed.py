@@ -216,6 +216,18 @@ class TestGMCFeedProduct(unittest.TestCase):
         product.set_stock_tracking("disabled")
         self.assertTrue(product.is_available(), "Expected product to be available")
     
+    def test_fulltitle_formation(self):
+        product = GMCFeedProduct(id="123", variant_id="456")
+        
+        product.set_title("Ranger Glove")
+        self.assertEqual(product.get_fulltitle(), "Ranger Glove", "Expected fulltitle to be Ranger Glove")
+
+        product.set_variant_title('"Color: Graphite Grey","Size: 2 XL"')
+        self.assertEqual(product.get_fulltitle(), "Ranger Glove (Graphite Grey, 2 XL)", "Expected fulltitle to be Ranger Glove (Graphite Grey, 2 XL)")
+
+        product.set_brand_title("Fox")
+        self.assertEqual(product.get_fulltitle(), "Fox Ranger Glove (Graphite Grey, 2 XL)", "Expected fulltitle to be Fox Ranger Glove (Graphite Grey, 2 XL)")
+
     def test_categories(self):
         product = GMCFeedProduct(id="123", variant_id="456")
 
