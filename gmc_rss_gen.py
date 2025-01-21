@@ -12,6 +12,7 @@ class GMCRSSGenerator:
         self.LOCAL_LISTINGS_FEED_FILENAME = 'gmc_local_listings_feed.xml'
         self.lightspeed_api = lightspeed.LightspeedAPI()
         self.storage = storage.Storage(cloud)
+        self.template_engine = template_engine.TemplateEngine()
         self.template_data = [] # to cache template data and avoid multiple API calls for different feeds
 
     def refresh_feed_files(self, cloud=False):
@@ -22,8 +23,8 @@ class GMCRSSGenerator:
         products_for_template = self.prepare_template_data(products)
         
         # Generate (render) feeds from templates
-        shopping_online_inventory_feed_output = template_engine.render(self.TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products_for_template)
-        local_listings_feed_output = template_engine.render(self.TEMPLATE_LOCAL_LISTINGS_FEED, products_for_template)
+        shopping_online_inventory_feed_output = self.template_engine.render(self.TEMPLATE_SHOPPING_ONLINE_INVENTORY_FEED, products_for_template)
+        local_listings_feed_output = self.template_engine.render(self.TEMPLATE_LOCAL_LISTINGS_FEED, products_for_template)
 
         # Save feeds to files
         self.storage.save_file(self.SHOPPING_ONLINE_INVENTORY_FEED_FILENAME, shopping_online_inventory_feed_output)

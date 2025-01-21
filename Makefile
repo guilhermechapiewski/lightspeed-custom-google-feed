@@ -26,6 +26,8 @@ remote_refresh_feeds:
 # Clean up generated feeds
 clean:
 	@rm -f gmc_*_feed.xml
+	@rm -f version.py
+	@rm -f test.xml
 
 # Check if config.py file exists
 check_config:
@@ -47,9 +49,9 @@ install_requirements:
 	@pip3 install -r requirements-dev.txt
 
 # Run tests
-test:
-	@nose2
+test: clean
+	@nose2 -v
 
 # Run tests with coverage
-test_coverage:
-	@nose2 --with-coverage
+test_coverage: clean
+	@nose2 -v --with-coverage
