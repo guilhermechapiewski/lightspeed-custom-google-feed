@@ -9,7 +9,6 @@
             <item>
                 <g:id>{{ product.id }}</g:id>
                 <g:store_code>{{ shop.store_code }}</g:store_code>
-                <g:quantity>{{ product.stock_level }}</g:quantity>
             {% if product.price.price_old_incl %}
                 <g:price>{{ product.price.price_old_incl | money_float }} {{ shop.currency | upper }}</g:price>
                 <g:sale_price>{{ product.price.price_incl | money_float }} {{ shop.currency | upper }}</g:sale_price>
