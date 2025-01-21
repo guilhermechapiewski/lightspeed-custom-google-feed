@@ -218,8 +218,56 @@ class TestGMCFeedProduct(unittest.TestCase):
     
     def test_categories(self):
         product = GMCFeedProduct(id="123", variant_id="456")
-        product.set_categories({"4568213": { "id": 4568213, "isVisible": True, "depth": 2, "sortOrder": 1, "title": "MTB gear" }})
-        self.assertEqual(product.get_categories(), ["MTB gear"], "Expected categories to be MTB gear")
 
+        api_categories = {
+            "4701200": {
+                "id": 4701200,
+                "createdAt": "2025-01-14T15:54:15+00:00",
+                "updatedAt": "2025-01-15T00:02:43+00:00",
+                "isVisible": True,
+                "depth": 3,
+                    "sortOrder": 6,
+                    "image": False,
+                    "url": "men/mtb-gear/gloves",
+                    "title": "Gloves"
+                },
+            "4568213": {
+                "id": 4568213,
+                "createdAt": "2024-06-26T23:59:10+00:00",
+                "updatedAt": "2025-01-16T01:43:13+00:00",
+                "isVisible": True,
+                "depth": 2,
+                "sortOrder": 1,
+                "image": {
+                    "id": 66837754,
+                    "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/66837754/50x50x2/file.jpg",
+                    "src": "https://cdn.shoplightspeed.com/shops/669439/files/66837754/file.jpg"
+                },
+                "url": "men/mtb-gear",
+                "title": "MTB gear"
+            },
+            "4701199": {
+                "id": 4701199,
+                "createdAt": "2025-01-14T15:53:13+00:00",
+                "updatedAt": "2025-01-16T01:59:31+00:00",
+                "isVisible": True,
+                "depth": 1,
+                "sortOrder": 2,
+                "image": {
+                    "id": 67976284,
+                    "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/67976284/50x50x2/file.jpg",
+                    "src": "https://cdn.shoplightspeed.com/shops/669439/files/67976284/file.jpg"
+                },
+                "url": "men",
+                "title": "Men"
+            }
+        }
+
+        product.set_categories(api_categories)
+        
+        template_categories = product.get_categories()
+        self.assertEqual(template_categories[0]["title"], "Men", "Expected first category to be Men")
+        self.assertEqual(template_categories[0]["subs"][0]["title"], "MTB gear", "Expected first subcategory to be MTB gear")
+        self.assertEqual(template_categories[0]["subs"][0]["subs"][0]["title"], "Gloves", "Expected subcategory's subcategory to be Gloves")
 if __name__ == '__main__':
     unittest.main() 
