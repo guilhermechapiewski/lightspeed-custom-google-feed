@@ -203,5 +203,18 @@ class TestGMCFeedProduct(unittest.TestCase):
         product.set_title("Fox Ranger Glove Youth")
         self.assertEqual(product.get_age_group(), "kids", "Expected age group to be kids")
 
+    def test_availability(self):
+        product = GMCFeedProduct(id="123", variant_id="456")
+        
+        product.set_stock_level(0)
+        self.assertFalse(product.is_available(), "Expected product to be unavailable")
+
+        product.set_stock_level(1)
+        self.assertTrue(product.is_available(), "Expected product to be available")
+
+        product.set_stock_level(0)
+        product.set_stock_tracking("disabled")
+        self.assertTrue(product.is_available(), "Expected product to be available")
+
 if __name__ == '__main__':
     unittest.main() 
