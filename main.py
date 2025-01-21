@@ -9,15 +9,12 @@ try:
 except ImportError:
     version = type('Version', (), {'git_commit': '', 'deploy_timestamp': 'N/A'})()
 
+IS_RUNNING_ON_CLOUD = False
+if os.getenv('GAE_ENV', '').startswith('standard') or os.getenv('GAE_ENV', '').startswith('flex'):
+    IS_RUNNING_ON_CLOUD = True
+
 app = flask.Flask(__name__)
-
-RUNNING_ON_CLOUD = False
-if os.getenv('GAE_ENV', '').startswith('standard'):
-    RUNNING_ON_CLOUD = True
-elif os.getenv('GAE_ENV', '').startswith('flex'):
-    RUNNING_ON_CLOUD = True
-
-feed_gen = GMCFeedGenerator(cloud=RUNNING_ON_CLOUD)
+feed_gen = GMCFeedGenerator(cloud=IS_RUNNING_ON_CLOUD)
 
 @app.route("/")
 def root():
