@@ -16,7 +16,7 @@ class GMCFeedGenerator:
         self.template_engine = template_engine.TemplateEngine()
         self.template_data = GMCFeedTemplateData()
 
-    def refresh_feed_files(self, cloud=False):
+    def refresh_feed_files(self):
         # Get products from Lightspeed API
         products = self.lightspeed_api.get_all_visible_products()
 
