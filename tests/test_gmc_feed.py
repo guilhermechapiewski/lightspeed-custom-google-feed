@@ -269,5 +269,6 @@ class TestGMCFeedProduct(unittest.TestCase):
         self.assertEqual(template_categories[0]["title"], "Men", "Expected first category to be Men")
         self.assertEqual(template_categories[0]["subs"][0]["title"], "MTB gear", "Expected first subcategory to be MTB gear")
         self.assertEqual(template_categories[0]["subs"][0]["subs"][0]["title"], "Gloves", "Expected subcategory's subcategory to be Gloves")
+
 if __name__ == '__main__':
     unittest.main() 
