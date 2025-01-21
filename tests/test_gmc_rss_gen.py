@@ -41,7 +41,7 @@ class TestGMCRSSGenerator(unittest.TestCase):
         mock_requests.get.side_effect = [self.count_response, self.catalog_response]
 
         products = self.rss_gen.lightspeed_api.get_all_visible_products()
-        products_for_template = self.rss_gen.prepare_template_data(products)
+        products_for_template = self.rss_gen.template_data.prepare_template_data(products)
         
         self.assertEqual(len(products_for_template), 7, "Expected 7 items in template data")
 
@@ -57,7 +57,7 @@ class TestGMCRSSGenerator(unittest.TestCase):
     def test_prepare_template_data_title_and_size_conversions(self, mock_requests):
         mock_requests.get.side_effect = [self.count_response, self.catalog_response]
         products = self.rss_gen.lightspeed_api.get_all_visible_products()
-        products_for_template = self.rss_gen.prepare_template_data(products)
+        products_for_template = self.rss_gen.template_data.prepare_template_data(products)
 
         for product in products_for_template:
             self.assertTrue(product['fulltitle'].startswith('Fox Ranger Glove'))
