@@ -1,6 +1,6 @@
 from google.cloud import storage
 import logging
-from config import CLOUD_STORAGE_BUCKET_NAME
+from .config import CLOUD_STORAGE_BUCKET_NAME
 
 class Storage:
 

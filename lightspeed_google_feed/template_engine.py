@@ -2,7 +2,7 @@ from datetime import datetime
 import logging
 import pytz
 from jinja2 import Environment, FileSystemLoader
-from config import SHOP
+from .config import SHOP
 
 class TemplateEngine:
 

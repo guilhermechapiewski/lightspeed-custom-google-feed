@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, Mock
-from gmc_rss_gen import GMCRSSGenerator
+from lightspeed_google_feed.gmc_rss_gen import GMCRSSGenerator
 
 class TestGMCRSSGenerator(unittest.TestCase):
     def setUp(self):

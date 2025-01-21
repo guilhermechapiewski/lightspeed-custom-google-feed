@@ -1,10 +1,10 @@
 import math
 import requests
 import logging
-from config import API_KEY, API_SECRET, BASE_URL
+from .config import API_KEY, API_SECRET, BASE_URL
 
 class LightspeedAPI:
-    
+
     def __init__(self):
         self.BASE_URL = BASE_URL
         self.AUTH = (API_KEY, API_SECRET)

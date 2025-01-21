@@ -1,7 +1,7 @@
 import logging
 import json
-from lightspeed_google_feed import lightspeed, storage, template_engine
-from config import SHOP
+from . import lightspeed, storage, template_engine
+from .config import SHOP
 
 class GMCRSSGenerator:
     def __init__(self, cloud=False):
@@ -243,13 +243,3 @@ class GMCRSSGenerator:
                         raise e  # Re-raise the exception to see the full stack trace
         
         return self.template_data
-
-if __name__ == "__main__":
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-    try:
-        logger.info("Executing from command line; refreshing feed files")
-        GMCRSSGenerator().refresh_feed_files()
-    except Exception as e:
-        logger.error(f"Error occurred: {str(e)}")
-        raise e

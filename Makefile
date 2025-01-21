@@ -21,7 +21,7 @@ test_coverage: clean
 
 # Generate feeds locally
 feed: clean check_config
-	@python3 gmc_rss_gen.py
+	@python3 main.py --generate-feed-locally
 
 # Refresh feeds on remote server
 remote_refresh_feeds:
@@ -39,8 +39,8 @@ clean:
 
 # Check if config.py file exists
 check_config:
-	@if [ ! -f config.py ]; then \
-		echo "Error: config.py file is missing. Please create a config.py file (copy config_TEMPLATE.py) with required settings."; \
+	@if [ ! -f ./lightspeed_google_feed/config.py ]; then \
+		echo "Error: ./lightspeed_google_feed/config.py file is missing. Please create a config.py file (copy config_TEMPLATE.py) inside the "lightspeed_google_feed" directory with the required settings."; \
 		exit 1; \
 	fi
 

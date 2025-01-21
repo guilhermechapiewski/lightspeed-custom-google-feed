@@ -6,7 +6,7 @@ exclude_lines =
     raise NotImplementedError  # Exclude NotImplementedError statements
 
 omit =
-    config*.py
+    lightspeed_google_feed/config*.py
     version.py
     main.py
     tests/*

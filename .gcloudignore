@@ -19,7 +19,7 @@ __pycache__/
 /setup.cfg
 
 lightspeed_api_playground/
-config_TEMPLATE.py
+lightspeed_google_feed/config_TEMPLATE.py
 README.md
 gmc_*_feed.xml
 .coverage
