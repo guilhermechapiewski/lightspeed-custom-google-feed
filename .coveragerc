@@ -1,0 +1,11 @@
+[report]
+exclude_lines = 
+    pragma: no cover   # Exclude lines with this pragma
+    if __name__ == "__main__":  # Exclude the main block
+    raise AssertionError  # Exclude assertion statements
+    raise NotImplementedError  # Exclude NotImplementedError statements
+
+omit =
+    config_TEMPLATE.py
+    version.py
+    main.py
