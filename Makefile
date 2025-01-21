@@ -1,5 +1,5 @@
 # Deploy to Google App Engine
-deploy: clean check_config create_deployment_info test
+deploy: clean check_config create_deployment_info
 	@echo "Deploying to Google App Engine..."
 	@gcloud app deploy
 
@@ -10,6 +10,14 @@ deploy_cron: clean check_config
 # Run Google App Engine application locally
 run: clean check_config
 	@python3 main.py
+
+# Run tests
+test: clean
+	@nose2 -v
+
+# Run tests with coverage
+test_coverage: clean
+	@nose2 -v --with-coverage
 
 # Generate feeds locally
 feed: clean check_config
@@ -47,11 +55,3 @@ create_deployment_info:
 install_requirements:
 	@pip3 install -r requirements.txt
 	@pip3 install -r requirements-dev.txt
-
-# Run tests
-test: clean
-	@nose2 -v
-
-# Run tests with coverage
-test_coverage: clean
-	@nose2 -v --with-coverage
