@@ -19,10 +19,12 @@ __pycache__/
 /setup.cfg
 
 .vscode/
-tests/
 lightspeed_api_playground/
 lightspeed_google_feed/config_TEMPLATE.py
-README.md
-gmc_*_feed.xml
+tests/
 .coverage*
+gmc_*_feed.xml
+nose2.cfg
+README.md
+requirements-dev.txt
 test.xml
