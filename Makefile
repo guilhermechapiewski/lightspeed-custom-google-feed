@@ -1,5 +1,5 @@
 # Deploy to Google App Engine
-deploy: clean check_config create_deployment_info
+deploy: clean check_config create_deployment_info test
 	@echo "Deploying to Google App Engine..."
 	@gcloud app deploy
 
