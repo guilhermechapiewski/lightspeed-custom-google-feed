@@ -20,7 +20,7 @@ class LightspeedAPI:
             response = requests.get(url, auth=self.AUTH)
             total_count = response.json()["count"]
             
-            self.cache.set(key=f"{API_KEY}-gmc-feed-product-count", value=total_count, time=15)
+            self.cache.set(key=f"{API_KEY}-gmc-feed-product-count", value=total_count, time=30)
         
         self.logger.info(f"Total products: {total_count}")
         return total_count
@@ -50,7 +50,7 @@ class LightspeedAPI:
                 
                 self.logger.info(f"Fetched page {page}/{total_pages}")
             
-            self.cache.set(key=f"{API_KEY}-gmc-feed-all-products", value=products, time=15)
+            self.cache.set(key=f"{API_KEY}-gmc-feed-all-products", value=products, time=30)
             
         self.logger.info(f"Successfully retrieved {len(products)} products")
 
