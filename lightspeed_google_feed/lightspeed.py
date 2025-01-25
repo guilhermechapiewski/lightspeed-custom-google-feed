@@ -1,4 +1,4 @@
-from google.cloud import memcache
+from google.appengine.api import memcache
 import math
 import requests
 import logging

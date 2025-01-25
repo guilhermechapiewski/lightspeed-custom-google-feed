@@ -2,6 +2,7 @@ import sys
 import logging
 import os
 import flask
+from google.appengine.api import wrap_wsgi_app
 from lightspeed_google_feed.gmc_feed import GMCFeedGenerator
 
 try:
@@ -14,6 +15,7 @@ if os.getenv('GAE_ENV', '').startswith('standard') or os.getenv('GAE_ENV', '').s
     IS_RUNNING_ON_CLOUD = True
 
 app = flask.Flask(__name__)
+app.wsgi_app = wrap_wsgi_app(app.wsgi_app)
 feed_gen = GMCFeedGenerator(cloud=IS_RUNNING_ON_CLOUD)
 
 @app.route("/")
