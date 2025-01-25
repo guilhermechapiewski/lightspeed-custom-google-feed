@@ -16,6 +16,9 @@ if os.getenv('GAE_ENV', '').startswith('standard') or os.getenv('GAE_ENV', '').s
 app = flask.Flask(__name__)
 feed_gen = GMCFeedGenerator(cloud=IS_RUNNING_ON_CLOUD)
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
 @app.route("/")
 def root():
     return f'''
@@ -38,12 +41,10 @@ def shopping_online_inventory_feed():
 
 @app.route("/local_listings_feed")
 def local_listings_feed():
-    return feed_gen.read_feed_file(feed_gen.LOCAL_LISTINGS_FEED_FILENAME), {'Content-Type': 'application/xml'}
+    return feed_gen.read_feed_file(feed_gen.LOCAL_LISTINGS_FEED_FILENAME), {'Content-Type': 'application/xml'}      
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--generate-feed-locally":
-        logger = logging.getLogger(__name__)
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         try:
             logger.info("Executing from command line; refreshing feed files")
             feed_gen.refresh_feed_files()
@@ -52,4 +53,5 @@ if __name__ == "__main__":
             raise e
     else:
         # Run AppEngine server locally when script is invoked directly without --generate-feed-locally
+        logger.info("Running AppEngine server locally")
         app.run(host="127.0.0.1", port=8080, debug=True)
