@@ -38,45 +38,45 @@ class GMCFeedTemplateData:
     
     def __init__(self):
         self.logger = logging.getLogger(__name__)
-        self.template_data = []
 
     def prepare_template_data(self, products):
         # Transform products data for template
-        if len(self.template_data) == 0:
-            for product in products:
-                self.logger.debug(f"Product: {product['id']} has {len(product['variants'])} variants")
-                for product_variant in product["variants"].values():
-                    try:
-                        # for each combination of product and variant, create a GMCProduct object
-                        gmc_product = GMCFeedProduct(product['id'], product_variant['id'])
-                        gmc_product.set_url_slug(product['url'])
-                        gmc_product.set_stock_level(product_variant.get("stockLevel"))
-                        gmc_product.set_stock_tracking(product_variant.get("stockTracking"))
-                        gmc_product.set_ean(product_variant.get('ean'))
-                        gmc_product.set_code(product_variant.get('articleCode'))
-                        gmc_product.set_weight(product_variant.get('weight'))
-                        gmc_product.set_price(product_variant.get("priceIncl"))
-                        gmc_product.set_old_price(product_variant.get("oldPriceIncl"))
-                        gmc_product.set_description(product['description'])
-                        gmc_product.set_title(product['fulltitle'])
-                        gmc_product.set_variant_title(product_variant.get('title'))
-                        gmc_product.set_categories(product.get('categories'))
-
-                        if product.get('images') and len(product.get('images')) > 0:
-                            gmc_product.add_images([image['src'] for image in sorted(product.get('images', {}).values(), key=lambda x: x['sortOrder'])])
-                        
-                        if product.get('brand'):
-                            gmc_product.set_brand_title(product['brand'].get('title', ''))
-
-                        # add the template data from the GMCProduct
-                        self.template_data.append(gmc_product.get_template_data())
-                    except Exception as e:
-                        self.logger.error(f"Error processing product: {product.get('id', 'unknown')}")
-                        self.logger.error(f"Product data:")
-                        self.logger.error(json.dumps(product, indent=4))
-                        raise e  # Re-raise the exception to see the full stack trace
+        template_data = []
         
-        return self.template_data
+        for product in products:
+            self.logger.debug(f"Product: {product['id']} has {len(product['variants'])} variants")
+            for product_variant in product["variants"].values():
+                try:
+                    # for each combination of product and variant, create a GMCProduct object
+                    gmc_product = GMCFeedProduct(product['id'], product_variant['id'])
+                    gmc_product.set_url_slug(product['url'])
+                    gmc_product.set_stock_level(product_variant.get("stockLevel"))
+                    gmc_product.set_stock_tracking(product_variant.get("stockTracking"))
+                    gmc_product.set_ean(product_variant.get('ean'))
+                    gmc_product.set_code(product_variant.get('articleCode'))
+                    gmc_product.set_weight(product_variant.get('weight'))
+                    gmc_product.set_price(product_variant.get("priceIncl"))
+                    gmc_product.set_old_price(product_variant.get("oldPriceIncl"))
+                    gmc_product.set_description(product['description'])
+                    gmc_product.set_title(product['fulltitle'])
+                    gmc_product.set_variant_title(product_variant.get('title'))
+                    gmc_product.set_categories(product.get('categories'))
+
+                    if product.get('images') and len(product.get('images')) > 0:
+                        gmc_product.add_images([image['src'] for image in sorted(product.get('images', {}).values(), key=lambda x: x['sortOrder'])])
+                    
+                    if product.get('brand'):
+                        gmc_product.set_brand_title(product['brand'].get('title', ''))
+
+                    # add the template data from the GMCProduct
+                    template_data.append(gmc_product.get_template_data())
+                except Exception as e:
+                    self.logger.error(f"Error processing product: {product.get('id', 'unknown')}")
+                    self.logger.error(f"Product data:")
+                    self.logger.error(json.dumps(product, indent=4))
+                    raise e  # Re-raise the exception to see the full stack trace
+        
+        return template_data
 
 class GMCFeedProduct:
     
