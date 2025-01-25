@@ -18,6 +18,7 @@ __pycache__/
 # Ignored by the build system
 /setup.cfg
 
+.DS_Store
 .vscode/
 lightspeed_api_playground/
 lightspeed_google_feed/config_TEMPLATE.py

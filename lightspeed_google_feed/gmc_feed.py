@@ -11,7 +11,7 @@ class GMCFeedGenerator:
         self.SHOPPING_ONLINE_INVENTORY_FEED_FILENAME = 'gmc_shopping_online_inventory_feed.xml'
         self.TEMPLATE_LOCAL_LISTINGS_FEED = 'TEMPLATE_gmc_local_listings.xml'
         self.LOCAL_LISTINGS_FEED_FILENAME = 'gmc_local_listings_feed.xml'
-        self.lightspeed_api = lightspeed.LightspeedAPI()
+        self.lightspeed_api = lightspeed.LightspeedAPI(cloud)
         self.storage = storage.Storage(cloud)
         self.template_engine = template_engine.TemplateEngine()
         self.template_data = GMCFeedTemplateData()

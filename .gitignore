@@ -1,3 +1,4 @@
+.DS_Store
 .vscode/
 lightspeed_google_feed/config.py
 lightspeed_api_playground/
