@@ -1,39 +1,32 @@
-from google.appengine.api import memcache
 import math
 import requests
 import logging
 from .config import API_KEY, API_SECRET, BASE_URL
+from .cache import SimpleCache
 
 class LightspeedAPI:
 
-    def __init__(self, cloud=False):
+    def __init__(self):
         self.BASE_URL = BASE_URL
         self.AUTH = (API_KEY, API_SECRET)
         self.logger = logging.getLogger(__name__)
-        self.cloud = cloud
+        self.cache = SimpleCache()
 
     def get_product_count(self):
-        total_count = None
-        
-        if self.cloud:
-            total_count = memcache.get(key=f"{API_KEY}-gmc-feed-product-count")
+        total_count = self.cache.get(key=f"{API_KEY}-gmc-feed-product-count")
         
         if total_count is None:
             url = f"{BASE_URL}/catalog/count.json"
             response = requests.get(url, auth=self.AUTH)
             total_count = response.json()["count"]
             
-            if self.cloud:
-                memcache.set(key=f"{API_KEY}-gmc-feed-product-count", value=total_count, time=30)
+            self.cache.set(key=f"{API_KEY}-gmc-feed-product-count", value=total_count, time=15)
         
         self.logger.info(f"Total products: {total_count}")
         return total_count
 
     def get_all_products(self):
-        products = None
-        
-        if self.cloud:
-            products = memcache.get(key=f"{API_KEY}-gmc-feed-all-products")
+        products = self.cache.get(key=f"{API_KEY}-gmc-feed-all-products")
         
         if products is None:
             products = []
@@ -57,8 +50,7 @@ class LightspeedAPI:
                 
                 self.logger.info(f"Fetched page {page}/{total_pages}")
             
-            if self.cloud:
-                memcache.set(key=f"{API_KEY}-gmc-feed-all-products", value=products, time=30)
+            self.cache.set(key=f"{API_KEY}-gmc-feed-all-products", value=products, time=15)
             
         self.logger.info(f"Successfully retrieved {len(products)} products")
 
