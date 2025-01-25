@@ -2,6 +2,7 @@ import time as system_time
 import logging
 
 class SimpleCache:
+    
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.cache = {}
