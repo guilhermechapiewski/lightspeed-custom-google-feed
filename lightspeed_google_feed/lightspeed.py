@@ -13,20 +13,20 @@ class LightspeedAPI:
         self.cache = SimpleCache()
 
     def get_product_count(self):
-        total_count = self.cache.get(key=f"{API_KEY}-gmc-feed-product-count")
+        total_count = self.cache.get(key=f"api-product-count")
         
         if total_count is None:
             url = f"{BASE_URL}/catalog/count.json"
             response = requests.get(url, auth=self.AUTH)
             total_count = response.json()["count"]
             
-            self.cache.set(key=f"{API_KEY}-gmc-feed-product-count", value=total_count, time=30)
+            self.cache.set(key=f"api-product-count", value=total_count, time=30)
         
         self.logger.info(f"Total products: {total_count}")
         return total_count
 
     def get_all_products(self):
-        products = self.cache.get(key=f"{API_KEY}-gmc-feed-all-products")
+        products = self.cache.get(key=f"api-all-products")
         
         if products is None:
             products = []
@@ -50,7 +50,7 @@ class LightspeedAPI:
                 
                 self.logger.info(f"Fetched page {page}/{total_pages}")
             
-            self.cache.set(key=f"{API_KEY}-gmc-feed-all-products", value=products, time=30)
+            self.cache.set(key=f"api-all-products", value=products, time=30)
             
         self.logger.info(f"Successfully retrieved {len(products)} products")
 
