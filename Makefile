@@ -16,6 +16,7 @@ test: clean
 	@nose2 -v
 
 # Run tests with coverage
+coverage: test_coverage
 test_coverage: clean
 	@nose2 -v --with-coverage
 
