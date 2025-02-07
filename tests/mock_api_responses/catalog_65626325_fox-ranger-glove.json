@@ -22,8 +22,8 @@
                 "updatedAt": "2025-01-16T01:42:42+00:00",
                 "image": {
                     "id": 67308325,
-                    "thumb": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67308325\/50x50x2\/file.jpg",
-                    "src": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67308325\/file.jpg"
+                    "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/67308325/50x50x2/file.jpg",
+                    "src": "https://cdn.shoplightspeed.com/shops/669439/files/67308325/file.jpg"
                 },
                 "url": "fox",
                 "title": "Fox"
@@ -32,8 +32,8 @@
             "deliverydate": false,
             "image": {
                 "id": 67984977,
-                "thumb": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984977\/50x50x2\/file.jpg",
-                "src": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984977\/file.jpg"
+                "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/67984977/50x50x2/file.jpg",
+                "src": "https://cdn.shoplightspeed.com/shops/669439/files/67984977/file.jpg"
             },
             "images": {
                 "64749669": {
@@ -41,32 +41,32 @@
                     "createdAt": "2025-01-14T22:36:42+00:00",
                     "updatedAt": "2025-01-14T22:36:42+00:00",
                     "sortOrder": 4,
-                    "thumb": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984997\/50x50x2\/file.jpg",
-                    "src": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984997\/file.jpg"
+                    "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/67984997/50x50x2/file.jpg",
+                    "src": "https://cdn.shoplightspeed.com/shops/669439/files/67984997/file.jpg"
                 },
                 "64749656": {
                     "id": 64749656,
                     "createdAt": "2025-01-14T22:36:30+00:00",
                     "updatedAt": "2025-01-14T22:36:30+00:00",
                     "sortOrder": 3,
-                    "thumb": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984984\/50x50x2\/file.jpg",
-                    "src": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984984\/file.jpg"
+                    "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/67984984/50x50x2/file.jpg",
+                    "src": "https://cdn.shoplightspeed.com/shops/669439/files/67984984/file.jpg"
                 },
                 "64749655": {
                     "id": 64749655,
                     "createdAt": "2025-01-14T22:36:29+00:00",
                     "updatedAt": "2025-01-14T22:36:29+00:00",
                     "sortOrder": 2,
-                    "thumb": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984983\/50x50x2\/file.jpg",
-                    "src": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984983\/file.jpg"
+                    "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/67984983/50x50x2/file.jpg",
+                    "src": "https://cdn.shoplightspeed.com/shops/669439/files/67984983/file.jpg"
                 },
                 "64749649": {
                     "id": 64749649,
                     "createdAt": "2025-01-14T22:36:16+00:00",
                     "updatedAt": "2025-01-14T22:36:16+00:00",
                     "sortOrder": 1,
-                    "thumb": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984977\/50x50x2\/file.jpg",
-                    "src": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67984977\/file.jpg"
+                    "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/67984977/50x50x2/file.jpg",
+                    "src": "https://cdn.shoplightspeed.com/shops/669439/files/67984977/file.jpg"
                 }
             },
             "categories": {
@@ -78,7 +78,7 @@
                     "depth": 3,
                     "sortOrder": 6,
                     "image": false,
-                    "url": "men\/mtb-gear\/gloves",
+                    "url": "men/mtb-gear/gloves",
                     "title": "Gloves"
                 },
                 "4568213": {
@@ -90,10 +90,10 @@
                     "sortOrder": 1,
                     "image": {
                         "id": 66837754,
-                        "thumb": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/66837754\/50x50x2\/file.jpg",
-                        "src": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/66837754\/file.jpg"
+                        "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/66837754/50x50x2/file.jpg",
+                        "src": "https://cdn.shoplightspeed.com/shops/669439/files/66837754/file.jpg"
                     },
-                    "url": "men\/mtb-gear",
+                    "url": "men/mtb-gear",
                     "title": "MTB gear"
                 },
                 "4701199": {
@@ -105,8 +105,8 @@
                     "sortOrder": 2,
                     "image": {
                         "id": 67976284,
-                        "thumb": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67976284\/50x50x2\/file.jpg",
-                        "src": "https:\/\/cdn.shoplightspeed.com\/shops\/669439\/files\/67976284\/file.jpg"
+                        "thumb": "https://cdn.shoplightspeed.com/shops/669439/files/67976284/50x50x2/file.jpg",
+                        "src": "https://cdn.shoplightspeed.com/shops/669439/files/67976284/file.jpg"
                     },
                     "url": "men",
                     "title": "Men"

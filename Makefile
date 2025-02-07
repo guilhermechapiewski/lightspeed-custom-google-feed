@@ -13,12 +13,12 @@ run: clean check_config
 
 # Run tests
 test: clean
-	@nose2 -v
+	@pytest
 
 # Run tests with coverage
 coverage: test_coverage
 test_coverage: clean
-	@nose2 -v --with-coverage
+	@pytest --cov=./lightspeed_google_feed/
 
 # Generate feeds locally
 feed: clean check_config
