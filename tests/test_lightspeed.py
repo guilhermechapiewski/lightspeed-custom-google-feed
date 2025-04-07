@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch, Mock
-from lightspeed_google_feed.lightspeed import LightspeedAPI
+from lightspeed_google_feed.lightspeed import LightspeedEcomAPI
 
-class TestLightspeedAPI(unittest.TestCase):
+class TestLightspeedEcomAPI(unittest.TestCase):
 
     def setUp(self):
-        self.api = LightspeedAPI()
+        self.api = LightspeedEcomAPI()
 
     @patch('lightspeed_google_feed.lightspeed.requests')
     def test_get_product_count(self, mock_requests):

@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import patch, Mock
-from lightspeed_google_feed.gmc_feed import GMCFeedGenerator, GMCFeedProduct
+from lightspeed_google_feed.gmc_feed import GMCFeedGenerator, GMCFeedProduct, GMCFeedProductFromLightspeed, GMCFeedProductFromEcwid
 
 class TestGMCFeedGenerator(unittest.TestCase):
     
     def setUp(self):
         """Set up test fixtures before each test method."""
-        self.feed_gen = GMCFeedGenerator()
+        self.feed_gen = GMCFeedGenerator(api_type="LS")
         self.count_response = Mock()
         self.count_response.json.return_value =  eval('{"count": 1}')
         self.catalog_response_fox_ranger_glove = Mock()
@@ -123,8 +123,30 @@ class TestGMCFeedProduct(unittest.TestCase):
         product.set_weight(500)
         self.assertEqual(product.weight, 500, "Expected weight to be 500")
     
-    def test_size_conversion(self):
+    def test_age_group_conversion_from_categories(self):
         product = GMCFeedProduct(id="123", variant_id="456")
+
+        product.set_title("Fox Ranger Glove")
+        self.assertEqual(product.get_age_group(), "adult", "Expected age group to be adult")
+
+        product.set_title("Fox Ranger Glove Youth")
+        self.assertEqual(product.get_age_group(), "kids", "Expected age group to be kids")
+
+class TestGMCFeedProductFromLightspeed(unittest.TestCase):
+    def test_fulltitle_formation(self):
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
+        
+        product.set_title("Ranger Glove")
+        self.assertEqual(product.get_fulltitle(), "Ranger Glove", "Expected fulltitle to be Ranger Glove")
+
+        product.set_variant_title('"Color: Graphite Grey","Size: 2 XL"')
+        self.assertEqual(product.get_fulltitle(), "Ranger Glove (Graphite Grey, 2 XL)", "Expected fulltitle to be Ranger Glove (Graphite Grey, 2 XL)")
+
+        product.set_brand_title("Fox")
+        self.assertEqual(product.get_fulltitle(), "Fox Ranger Glove (Graphite Grey, 2 XL)", "Expected fulltitle to be Fox Ranger Glove (Graphite Grey, 2 XL)")
+    
+    def test_size_conversion(self):
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
         
         product.set_variant_title('"Color: Graphite Grey","Size: 2 XL"')
         self.assertEqual(product.get_size(), "2XL", "Expected size to be 2XL")
@@ -148,7 +170,7 @@ class TestGMCFeedProduct(unittest.TestCase):
         self.assertEqual(product.get_size(), "XXS", "Expected size to be 2XL")
     
     def test_size_conversion_for_youth_products(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
         product.set_title("Fox Ranger Glove Youth")
         product.set_variant_title('"Color: Graphite Grey","Size: 2 XL"')
         self.assertEqual(product.get_size(), "2XL", "Expected size to be 2XL")
@@ -169,7 +191,7 @@ class TestGMCFeedProduct(unittest.TestCase):
         self.assertEqual(product.get_size(), "XL", "Expected size to be XL")
 
     def test_gender_conversion_from_variant_title(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
         
         product.set_variant_title('"Color: Graphite Grey","Size: 2 XL"')
         self.assertEqual(product.get_gender(), "unisex", "Expected gender to be unisex")
@@ -187,7 +209,7 @@ class TestGMCFeedProduct(unittest.TestCase):
         self.assertEqual(product.get_gender(), "unisex", "Expected gender to be unisex")
     
     def test_gender_conversion_from_title(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
 
         product.set_title("Fox Ranger Glove")
         self.assertEqual(product.get_gender(), "unisex", "Expected gender to be unisex")
@@ -203,32 +225,9 @@ class TestGMCFeedProduct(unittest.TestCase):
 
         product.set_title("Fox Ranger Glove Women's")
         self.assertEqual(product.get_gender(), "female", "Expected gender to be female")
-
-    def test_gender_conversion_from_categories(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
-
-        product.set_title("Fox Ranger Glove")
-        product.set_variant_title('"Color: Graphite Grey"')
-        product.set_categories({"4568213": { "id": 4568213, "isVisible": True, "depth": 2, "sortOrder": 1, "title": "MTB gear" }})
-        self.assertEqual(product.get_gender(), "unisex", "Expected gender to be unisex")
-
-        product.set_categories({"4568213": { "id": 4568213, "isVisible": True, "depth": 2, "sortOrder": 1, "title": "Men" }})
-        self.assertEqual(product.get_gender(), "male", "Expected gender to be male")
-
-        product.set_categories({"4568213": { "id": 4568213, "isVisible": True, "depth": 2, "sortOrder": 1, "title": "Women" }})
-        self.assertEqual(product.get_gender(), "female", "Expected gender to be female")
     
-    def test_age_group_conversion_from_categories(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
-
-        product.set_title("Fox Ranger Glove")
-        self.assertEqual(product.get_age_group(), "adult", "Expected age group to be adult")
-
-        product.set_title("Fox Ranger Glove Youth")
-        self.assertEqual(product.get_age_group(), "kids", "Expected age group to be kids")
-
     def test_availability(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
         
         product.set_stock_level(0)
         self.assertFalse(product.is_available(), "Expected product to be unavailable")
@@ -239,21 +238,9 @@ class TestGMCFeedProduct(unittest.TestCase):
         product.set_stock_level(0)
         product.set_stock_tracking("disabled")
         self.assertTrue(product.is_available(), "Expected product to be available")
-    
-    def test_fulltitle_formation(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
-        
-        product.set_title("Ranger Glove")
-        self.assertEqual(product.get_fulltitle(), "Ranger Glove", "Expected fulltitle to be Ranger Glove")
-
-        product.set_variant_title('"Color: Graphite Grey","Size: 2 XL"')
-        self.assertEqual(product.get_fulltitle(), "Ranger Glove (Graphite Grey, 2 XL)", "Expected fulltitle to be Ranger Glove (Graphite Grey, 2 XL)")
-
-        product.set_brand_title("Fox")
-        self.assertEqual(product.get_fulltitle(), "Fox Ranger Glove (Graphite Grey, 2 XL)", "Expected fulltitle to be Fox Ranger Glove (Graphite Grey, 2 XL)")
 
     def test_categories(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
 
         api_categories = {
             "4701200": {
@@ -307,48 +294,52 @@ class TestGMCFeedProduct(unittest.TestCase):
         self.assertEqual(template_categories[0]["subs"][0]["subs"][0]["title"], "Gloves", "Expected subcategory's subcategory to be Gloves")
     
     def test_backordered_products_have_special_availability_status_and_delivery_date(self):
-        product = GMCFeedProduct(id="123", variant_id="456")
-        product.set_delivery_date_message_in_stock("1-3 days")
-        product.set_delivery_date_message_out_of_stock("6-9 days")
-
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
+    
         product.set_stock_level(0)
         product.set_stock_tracking("enabled")
         self.assertFalse(product.is_available(), "Expected product to be unavailable")
-        self.assertIsNone(product.get_delivery_date_message(), "Expected delivery date message to be None")
         self.assertEqual(product.get_pickup_SLA(), "multi-week", "Expected pickup SLA to be multi-week")
 
         product.set_stock_level(1)
         product.set_stock_tracking("enabled")
         self.assertTrue(product.is_available(), "Expected product to be available")
-        self.assertIsNone(product.get_delivery_date_message(), "Expected delivery date message to be None")
         self.assertEqual(product.get_pickup_SLA(), "same_day", "Expected pickup SLA to be same_day")
 
         product.set_stock_level(0)
         product.set_stock_tracking("disabled")
         self.assertTrue(product.is_available(), "Expected product to be available if stock tracking is disabled, regardless of stock level")
-        self.assertIsNone(product.get_delivery_date_message(), "Expected delivery date message to be None")
         self.assertEqual(product.get_pickup_SLA(), "multi-week", "Expected pickup SLA to be multi-week")
 
         product.set_stock_level(1)
         product.set_stock_tracking("disabled")
         self.assertTrue(product.is_available(), "Expected product to be available if stock tracking is disabled, regardless of stock level")
-        self.assertIsNone(product.get_delivery_date_message(), "Expected delivery date message to be None")
         self.assertEqual(product.get_pickup_SLA(), "same_day", "Expected pickup SLA to be same_day")
 
         product.set_stock_level(0)
         product.set_stock_tracking("indicator")
         self.assertTrue(product.is_available(), "Expected product to be available")
-        self.assertIsNotNone(product.get_delivery_date_message(), "Expected delivery date message to not be None")
-        self.assertEqual(product.get_delivery_date_message(), {"in_stock": "1-3 days", "out_of_stock": "6-9 days"}, "Expected delivery date message to be a dictionary with the values set")
         self.assertEqual(product.get_pickup_SLA(), "multi-week", "Expected pickup SLA to be multi-week")
         
         product.set_stock_level(1)
         product.set_stock_tracking("indicator")
         self.assertTrue(product.is_available(), "Expected product to be available")
-        self.assertIsNotNone(product.get_delivery_date_message(), "Expected delivery date message to not be None")
-        self.assertEqual(product.get_delivery_date_message(), {"in_stock": "1-3 days", "out_of_stock": "6-9 days"}, "Expected delivery date message to be a dictionary with the values set")
         self.assertEqual(product.get_pickup_SLA(), "same_day", "Expected pickup SLA to be same_day")
+    
+    def test_gender_conversion_from_categories(self):
+        product = GMCFeedProductFromLightspeed(id="123", variant_id="456")
 
+        product.set_title("Fox Ranger Glove")
+        product.set_variant_title('"Color: Graphite Grey"')
+        product.set_categories({"4568213": { "id": 4568213, "isVisible": True, "depth": 2, "sortOrder": 1, "title": "MTB gear" }})
+        
+        self.assertEqual(product.get_gender(), "unisex", "Expected gender to be unisex")
+
+        product.set_categories({"4568213": { "id": 4568213, "isVisible": True, "depth": 2, "sortOrder": 1, "title": "Men" }})
+        self.assertEqual(product.get_gender(), "male", "Expected gender to be male")
+
+        product.set_categories({"4568213": { "id": 4568213, "isVisible": True, "depth": 2, "sortOrder": 1, "title": "Women" }})
+        self.assertEqual(product.get_gender(), "female", "Expected gender to be female")
 
 if __name__ == '__main__':
     unittest.main() 

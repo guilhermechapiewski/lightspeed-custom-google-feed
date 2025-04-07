@@ -2,19 +2,24 @@
 
 ## What is this?
 
-A Python script + Google App Engine app that fetches all products from your Lightspeed eCommerce (C-Series) instance using the [Lightspeed eCom API](https://developers.lightspeedhq.com/ecom/introduction/introduction/) and generates RSS feeds following the [Google Merchant Center Local Listings](https://support.google.com/merchants/answer/14779112?hl=en) and [Google Merchant Center Online Inventory](https://support.google.com/merchants/answer/7052112?hl=en) specifications.
+A Python script + Google App Engine app that fetches all products from your Lightspeed eCommerce instance and generates RSS feeds following the [Google Merchant Center Local Listings](https://support.google.com/merchants/answer/14779112?hl=en) and [Google Merchant Center Online Inventory](https://support.google.com/merchants/answer/7052112?hl=en) specifications.
 
 Two feeds are generated/supported:
 1. *Google Shopping online inventory*: all products available for sale in your ecommerce website/catalog.
 2. *Google Local Listings and Ads*: all products available in the physical "store shelf".
 
+## Lightspeed versions supported
+
+- Lightspeed eCommerce C-Series using the [Lightspeed eCom API](https://developers.lightspeedhq.com/ecom/introduction/introduction/)
+- Lightspeed eCommerce E-Series (a.k.a. Ecwid) using the [Ecwid REST API](https://docs.ecwid.com/api-reference)
+
 ## Why do I need this?
 
 These feeds are required to make Google Merchant Center work properly for both your online store and your physical store/local listings in Google Shopping.
 
-While Lightspeed eCom has a custom feeds tool, it has limited functionality. For example, it's not possible to create a feed that includes product variants, custom fields or specifications. While all the minimum necessary fields are available in the Lightspeed custom feeds tool, the additional fields make the RSS feed more complete, with more specifications and higher quality, boosting your relevance in Google Ads/Search results and Shopping, and improving your online presence.
+While Lightspeed provides Google Merchant Center feeds out of the box, it has limited functionality. In Ecwid/E-Series, there is no customization capability. In C-Series, while there is a custom feeds tool available, it has many gaps - for example, it's not possible to create a feed that includes product variants, custom fields or specifications. These additional fields are important to make the feed more complete, with more specifications and higher quality, boosting your relevance in Google Ads/Search results and Google Shopping, improving your online presence.
 
-As much as possible the templates used by this app are compatible with Lightspeed eCom - if desired, you should be able to copy and paste any custom feeds of your liking from there to here (although it's not necessary).
+As much as possible the templates used by this app are compatible with Lightspeed C-Series - if desired, you should be able to copy and paste any custom feeds of your liking from there to here (although it's not necessary).
 
 ## How to use
 
@@ -67,3 +72,11 @@ Example: Get all attributes for a product with ID=`PRODUCT_ID`:
 
 Example: Get all catalog items for a product with ID=`PRODUCT_ID`:
 * `curl "https://YOUR_KEY:YOUR_SECRET@api.shoplightspeed.com/us/catalog/PRODUCT_ID.json"`
+
+## Ecwid API 101
+
+Useful links:
+- [Ecwid API documentation](https://docs.ecwid.com/api-reference)
+
+Example: Get products
+* `curl --location 'https://app.ecwid.com/api/v3/{your_store_id}/products' --header 'Authorization: Bearer YOUR_SECRET`
