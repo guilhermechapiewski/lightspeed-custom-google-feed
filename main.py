@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] [%(leveln
 @app.route("/")
 def root():
     return f'''
-Google Merchant Center Feed Generator for Lightspeed eCom C-Series<br>
+Google Merchant Center Feed Generator for Lightspeed<br>
 <a href="https://github.com/guilhermechapiewski/lightspeed-custom-google-feed#lightspeed-custom-google-feed">Documentation</a> | 
 <a href="/shopping_online_inventory_feed">Shopping Online Inventory Feed</a> | 
 <a href="/local_listings_feed">Local Listings Feed</a> | 
