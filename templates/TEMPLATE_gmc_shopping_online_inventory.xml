@@ -14,14 +14,12 @@
                 <description>{{ product.description | cdata }}</description>
                 <link>{{ (product.url ~ '?source=googlebase') | url }}</link>
                 {% for image in product.images | limit(1) %}
-                    {% if loop.first %}
-                        <g:image_link>{{ image | url_image | replace('image', 'image1') }}</g:image_link>
-                    {% endif %}
+                    <g:image_link>{{ image | url_image }}</g:image_link>
                 {% endfor %}
                 {% if product.images | length > 1 %}
                     {% for image in product.images | limit(10) %}
                         {% if not loop.first %}
-                            <g:additional_image_link>{{ image | url_image | replace('image', 'image' ~ loop.index) }}</g:additional_image_link>
+                            <g:additional_image_link>{{ image | url_image }}</g:additional_image_link>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
