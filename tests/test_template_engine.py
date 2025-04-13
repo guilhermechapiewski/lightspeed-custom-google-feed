@@ -25,7 +25,22 @@ class TestTemplateEngine(unittest.TestCase):
         self.assertEqual(self.engine._jinja_url("http://myshop.com/product"), "https://myshop.com/product")
         
         # Test adding domain to relative URL
-        self.assertEqual(self.engine._jinja_url("/product"), f"{shop_domain}/product")
+        self.assertEqual(self.engine._jinja_url("/product"), f"https://myshop.com/product")
+        
+        # Test with None
+        self.assertIsNone(self.engine._jinja_url(None))
+    
+    def test_jinja_url_with_www(self):
+        """Test URL formatting filter"""
+        shop_domain = "https://www.myshop.com"
+        self.engine.SHOP = {'domain': shop_domain}
+        
+        # Test http to https conversion
+        self.assertEqual(self.engine._jinja_url("http://myshop.com/product"), "https://myshop.com/product")
+        self.assertEqual(self.engine._jinja_url("http://www.myshop.com/product"), "https://www.myshop.com/product")
+        
+        # Test adding domain to relative URL
+        self.assertEqual(self.engine._jinja_url("/product"), f"https://www.myshop.com/product")
         
         # Test with None
         self.assertIsNone(self.engine._jinja_url(None))
