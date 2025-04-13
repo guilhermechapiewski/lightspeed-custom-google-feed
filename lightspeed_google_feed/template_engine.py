@@ -44,7 +44,7 @@ class TemplateEngine:
         #self.logger.debug(f"Template URL filter: Making sure this is a valid URL: {value}")
         if value:
             value = value.replace('http://', 'https://')
-            if not value.startswith(self.SHOP['domain']):
+            if not value.startswith(self.SHOP['domain']) and not value.startswith(self.SHOP['domain'].replace('://www.', '://')):
                 value = f"{self.SHOP['domain']}{value}"
         #self.logger.debug(f"Template URL filter: {value}")
         return value
